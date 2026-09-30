@@ -120,7 +120,7 @@ export const Broadcast: React.FC = () => {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold text-white">অফিশিয়াল চ্যাট অ্যানাউন্সমেন্ট</h3>
+              <h3 className="text-sm font-bold text-white">Official Chat Announcement</h3>
               <Badge variant="primary">Official Chat</Badge>
             </div>
             <p className="text-xs text-slate-400 mt-1">
@@ -147,7 +147,7 @@ export const Broadcast: React.FC = () => {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold text-white">ইন-অ্যাপ / পুশ নোটিফিকেশন</h3>
+              <h3 className="text-sm font-bold text-white">In-App & Push Notification</h3>
               <Badge variant="success">Push & In-App</Badge>
             </div>
             <p className="text-xs text-slate-400 mt-1">
