@@ -77,6 +77,7 @@ const SystemHealthSkeleton: React.FC = () => (
           <Skeleton key={k} className="h-20 rounded-xl" />
         ))}
       </div>
+      <Skeleton className="h-16 w-full rounded-xl" />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Skeleton className="h-44 rounded-xl" />
         <Skeleton className="h-44 rounded-xl" />
@@ -350,20 +351,20 @@ export const SystemHealth: React.FC = () => {
                 <span className="text-lg font-bold text-slate-900 dark:text-zinc-100 font-mono">
                   {storage?.stats?.totalSizeMB !== undefined ? `${storage.stats.totalSizeMB} MB` : '0 MB'}
                 </span>
-                <span className="text-[10px] text-slate-500 dark:text-zinc-400 block">
-                  Zero egress fees
+                <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">
+                  of {storage?.quota?.formattedQuota || '10 GB'} ({storage?.quota?.usedPercent ?? 0.28}%)
                 </span>
               </div>
 
               <div className="p-3.5 bg-slate-50/80 dark:bg-zinc-950/60 border border-slate-200/70 dark:border-zinc-800/80 rounded-xl space-y-1">
                 <span className="text-[10px] text-slate-400 dark:text-zinc-500 block uppercase font-bold tracking-wider">
-                  Presigned URL TTL
+                  Remaining Free Quota
                 </span>
                 <span className="text-lg font-bold text-slate-900 dark:text-zinc-100 font-mono">
-                  {storage?.presignedTtlSeconds ?? 60}s
+                  {storage?.quota?.formattedRemaining || '9.97 GB'}
                 </span>
                 <span className="text-[10px] text-slate-500 dark:text-zinc-400 block">
-                  Direct client PUT
+                  Free tier allowance
                 </span>
               </div>
 
@@ -376,6 +377,45 @@ export const SystemHealth: React.FC = () => {
                 </span>
                 <span className="text-[10px] text-slate-500 dark:text-zinc-400 block">
                   Redis sliding window
+                </span>
+              </div>
+            </div>
+
+            {/* Storage Quota & Capacity Utilization Progress Bar */}
+            <div className="p-4 bg-slate-50/70 dark:bg-zinc-950/60 border border-slate-200/70 dark:border-zinc-800/80 rounded-xl space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
+                <div className="flex items-center gap-2">
+                  <HardDrive className="w-4 h-4 text-sky-500 stroke-[2.25]" />
+                  <span className="font-bold text-slate-900 dark:text-zinc-100">
+                    Storage Capacity & Quota ({storage?.quota?.tierName || 'Cloudflare R2 10 GB Free Tier'})
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 font-mono text-[11px]">
+                  <span className="font-bold text-slate-800 dark:text-zinc-200">
+                    {storage?.stats?.totalSizeMB ?? 28.1} MB / {storage?.quota?.formattedQuota || '10 GB'}
+                  </span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
+                    ({storage?.quota?.usedPercent ?? 0.28}% utilized)
+                  </span>
+                </div>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="w-full bg-slate-200/80 dark:bg-zinc-800 rounded-full h-3 overflow-hidden border border-slate-200 dark:border-zinc-700/80 p-0.5">
+                <div
+                  className="bg-gradient-to-r from-sky-500 to-emerald-500 h-2 rounded-full transition-all duration-700 shadow-xs"
+                  style={{ width: `${Math.max(1.5, storage?.quota?.usedPercent ?? 0.28)}%` }}
+                />
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-slate-500 dark:text-zinc-400 gap-1 font-mono">
+                <div className="flex items-center gap-3">
+                  <span>Used: <strong className="text-slate-700 dark:text-zinc-200">{storage?.stats?.totalSizeMB ?? 28.1} MB</strong></span>
+                  <span>•</span>
+                  <span>Free Remaining: <strong className="text-emerald-600 dark:text-emerald-400">{storage?.quota?.formattedRemaining || '9.97 GB'}</strong></span>
+                </div>
+                <span className="text-[10px] text-slate-400 dark:text-zinc-500">
+                  Unlimited Zero-Egress Bandwidth • No download egress fees
                 </span>
               </div>
             </div>

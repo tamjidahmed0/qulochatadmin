@@ -105,6 +105,19 @@ export interface BroadcastItem {
   createdAt: string;
 }
 
+export interface StorageQuotaData {
+  tierName: string;
+  quotaGB: number;
+  quotaMB: number;
+  quotaBytes: number;
+  usedPercent: number;
+  remainingGB: number;
+  remainingMB: number;
+  formattedUsed: string;
+  formattedQuota: string;
+  formattedRemaining: string;
+}
+
 export interface StorageHealthData {
   name: string;
   provider: string;
@@ -117,10 +130,14 @@ export interface StorageHealthData {
   uploadProtocol: string;
   presignedTtlSeconds: number;
   error?: string | null;
+  quota?: StorageQuotaData;
   stats: {
     totalFiles: number;
     totalSizeBytes: number;
     totalSizeMB: number;
+    quotaGB?: number;
+    usedPercent?: number;
+    remainingGB?: number;
     imagesCount: number;
     audioCount: number;
     documentsCount: number;
