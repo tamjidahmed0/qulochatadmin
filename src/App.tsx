@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './lib/queryClient';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { PublicRoute } from './routes/PublicRoute';
 import { AdminLayout } from './components/Layout/AdminLayout';
@@ -14,22 +15,18 @@ import { SystemHealth } from './pages/SystemHealth';
 import { Settings } from './pages/Settings';
 import { Toaster } from 'sonner';
 
+const ThemedToaster: React.FC = () => {
+  const { theme } = useTheme();
+  return <Toaster position="top-right" theme={theme} richColors closeButton />;
+};
+
 export const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AuthProvider>
-          <Toaster
-            position="top-right"
-            theme="dark"
-            toastOptions={{
-              style: {
-                background: '#0f172a',
-                border: '1px solid #1e293b',
-                color: '#f8fafc',
-              },
-            }}
-          />
+      <ThemeProvider>
+        <BrowserRouter>
+          <AuthProvider>
+            <ThemedToaster />
           <Routes>
             {/* Public Routes (Admin Login only) */}
             <Route element={<PublicRoute />}>
@@ -52,6 +49,7 @@ export const App: React.FC = () => {
           </Routes>
         </AuthProvider>
       </BrowserRouter>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };

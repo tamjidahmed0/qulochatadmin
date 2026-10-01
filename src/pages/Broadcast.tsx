@@ -94,8 +94,10 @@ export const Broadcast: React.FC = () => {
     <div className="space-y-8">
       {/* Page Title & Intro */}
       <div>
-        <h2 className="text-xl font-bold text-white tracking-tight">Notification & Announcement Center</h2>
-        <p className="text-xs text-slate-400 mt-1">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-zinc-50 tracking-tight">
+          Notification & Announcement Center
+        </h2>
+        <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">
           Broadcast official platform announcements directly to inboxes or push alerts to active users
         </p>
       </div>
@@ -107,23 +109,27 @@ export const Broadcast: React.FC = () => {
           onClick={() => setActiveTab('chat')}
           className={`p-5 rounded-2xl border text-left transition-all relative overflow-hidden flex items-start gap-4 cursor-pointer ${
             activeTab === 'chat'
-              ? 'bg-blue-600/10 border-blue-500 shadow-md shadow-blue-500/10 ring-1 ring-blue-500/30'
-              : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+              ? 'bg-sky-50 dark:bg-sky-500/10 border-sky-500 shadow-md shadow-sky-500/10 ring-1 ring-sky-500/30'
+              : 'bg-white dark:bg-zinc-900 border-slate-200/80 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700 shadow-xs'
           }`}
         >
           <div
             className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
-              activeTab === 'chat' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400'
+              activeTab === 'chat'
+                ? 'bg-sky-500 text-white shadow-sm shadow-sky-500/20'
+                : 'bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400'
             }`}
           >
-            <Megaphone className="w-6 h-6" />
+            <Megaphone className="w-6 h-6 stroke-[2.25]" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold text-white">Official Chat Announcement</h3>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">
+                Official Chat Announcement
+              </h3>
               <Badge variant="primary">Official Chat</Badge>
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">
               Sends an official system message directly into every workspace owner's dedicated chat channel with live websocket delivery.
             </p>
           </div>
@@ -134,23 +140,27 @@ export const Broadcast: React.FC = () => {
           onClick={() => setActiveTab('push')}
           className={`p-5 rounded-2xl border text-left transition-all relative overflow-hidden flex items-start gap-4 cursor-pointer ${
             activeTab === 'push'
-              ? 'bg-emerald-600/10 border-emerald-500 shadow-md shadow-emerald-500/10 ring-1 ring-emerald-500/30'
-              : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+              ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 shadow-md shadow-emerald-500/10 ring-1 ring-emerald-500/30'
+              : 'bg-white dark:bg-zinc-900 border-slate-200/80 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700 shadow-xs'
           }`}
         >
           <div
             className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
-              activeTab === 'push' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400'
+              activeTab === 'push'
+                ? 'bg-emerald-500 text-white shadow-sm shadow-emerald-500/20'
+                : 'bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400'
             }`}
           >
-            <Bell className="w-6 h-6" />
+            <Bell className="w-6 h-6 stroke-[2.25]" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold text-white">In-App & Push Notification</h3>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">
+                In-App & Push Notification
+              </h3>
               <Badge variant="success">Push & In-App</Badge>
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">
               Dispatches global in-app alerts stored in the database, real-time toast popups, and FCM push notifications to mobile/web.
             </p>
           </div>
@@ -160,18 +170,18 @@ export const Broadcast: React.FC = () => {
       {/* Broadcast Form & Live Preview Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left: Input Form (7 cols) */}
-        <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm">
-          <div className="flex items-center gap-2.5 mb-5 pb-4 border-b border-slate-800">
+        <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 shadow-sm shadow-slate-200/40 dark:shadow-black/40">
+          <div className="flex items-center gap-2.5 mb-5 pb-4 border-b border-slate-100 dark:border-zinc-800">
             {activeTab === 'chat' ? (
-              <Megaphone className="w-5 h-5 text-blue-400" />
+              <Megaphone className="w-5 h-5 text-sky-500 stroke-[2.25]" />
             ) : (
-              <Bell className="w-5 h-5 text-emerald-400" />
+              <Bell className="w-5 h-5 text-emerald-500 stroke-[2.25]" />
             )}
             <div>
-              <h3 className="text-sm font-bold text-white">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">
                 {activeTab === 'chat' ? 'Compose Official Chat Announcement' : 'Compose In-App & Push Notification'}
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-zinc-400">
                 {activeTab === 'chat'
                   ? 'Delivers to every workspace owner in their system channel'
                   : 'Delivers to all active users on web and mobile'}
@@ -183,7 +193,7 @@ export const Broadcast: React.FC = () => {
             {activeTab === 'chat' ? (
               <>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5">
                     Announcement Headline (Optional)
                   </label>
                   <input
@@ -191,13 +201,13 @@ export const Broadcast: React.FC = () => {
                     value={chatTitle}
                     onChange={(e) => setChatTitle(e.target.value)}
                     placeholder="e.g., 🎉 Version 2.5 Released: AI Voice Live Talk"
-                    className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 focus:border-blue-500 rounded-xl text-sm text-white placeholder-slate-500 outline-none transition"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                    Announcement Message (Markdown supported) <span className="text-rose-400">*</span>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5">
+                    Announcement Message (Markdown supported) <span className="text-rose-500">*</span>
                   </label>
                   <textarea
                     rows={6}
@@ -205,13 +215,13 @@ export const Broadcast: React.FC = () => {
                     value={chatMessage}
                     onChange={(e) => setChatMessage(e.target.value)}
                     placeholder="Write your official update, feature release notes, or system news..."
-                    className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 focus:border-blue-500 rounded-xl text-sm text-white placeholder-slate-500 outline-none transition font-sans"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition font-sans"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-                    <Image className="w-3.5 h-3.5 text-slate-400" />
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5 flex items-center gap-1.5">
+                    <Image className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" />
                     <span>Banner Image or Attachment URL (Optional)</span>
                   </label>
                   <input
@@ -219,15 +229,15 @@ export const Broadcast: React.FC = () => {
                     value={chatBannerUrl}
                     onChange={(e) => setChatBannerUrl(e.target.value)}
                     placeholder="https://cdn.example.com/banner.jpg"
-                    className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 focus:border-blue-500 rounded-xl text-sm text-white placeholder-slate-500 outline-none transition font-mono text-xs"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition font-mono text-xs"
                   />
                 </div>
               </>
             ) : (
               <>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                    Notification Title <span className="text-rose-400">*</span>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5">
+                    Notification Title <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -235,13 +245,13 @@ export const Broadcast: React.FC = () => {
                     value={pushTitle}
                     onChange={(e) => setPushTitle(e.target.value)}
                     placeholder="e.g., Scheduled Server Maintenance Notice"
-                    className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 focus:border-emerald-500 rounded-xl text-sm text-white placeholder-slate-500 outline-none transition"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                    Notification Message Body <span className="text-rose-400">*</span>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5">
+                    Notification Message Body <span className="text-rose-500">*</span>
                   </label>
                   <textarea
                     rows={4}
@@ -249,13 +259,13 @@ export const Broadcast: React.FC = () => {
                     value={pushBody}
                     onChange={(e) => setPushBody(e.target.value)}
                     placeholder="e.g., We will perform database maintenance tonight at 2:00 AM UTC. Estimated downtime is under 5 minutes."
-                    className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 focus:border-emerald-500 rounded-xl text-sm text-white placeholder-slate-500 outline-none transition"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-                    <Link2 className="w-3.5 h-3.5 text-slate-400" />
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5 flex items-center gap-1.5">
+                    <Link2 className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" />
                     <span>Action URL (Optional Link on click)</span>
                   </label>
                   <input
@@ -263,7 +273,7 @@ export const Broadcast: React.FC = () => {
                     value={pushActionUrl}
                     onChange={(e) => setPushActionUrl(e.target.value)}
                     placeholder="/settings or https://quplochat.com/news"
-                    className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 focus:border-emerald-500 rounded-xl text-sm text-white placeholder-slate-500 outline-none transition font-mono text-xs"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition font-mono text-xs"
                   />
                 </div>
               </>
@@ -273,10 +283,10 @@ export const Broadcast: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSending}
-                className={`w-full py-3 px-4 rounded-xl text-white font-semibold text-sm transition flex items-center justify-center gap-2 shadow-lg cursor-pointer disabled:opacity-50 ${
+                className={`w-full py-3 px-4 rounded-xl text-white font-semibold text-sm transition flex items-center justify-center gap-2 shadow-sm cursor-pointer disabled:opacity-50 ${
                   activeTab === 'chat'
-                    ? 'bg-blue-600 hover:bg-blue-500 shadow-blue-600/30'
-                    : 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/30'
+                    ? 'bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 shadow-sky-500/20'
+                    : 'bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-400 shadow-emerald-500/20'
                 }`}
               >
                 {isSending ? (
@@ -297,29 +307,29 @@ export const Broadcast: React.FC = () => {
 
         {/* Right: Live Realistic Device Mockup Preview (5 cols) */}
         <div className="lg:col-span-5 flex flex-col justify-start space-y-4">
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-            <Eye className="w-4 h-4 text-blue-400" />
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">
+            <Eye className="w-4 h-4 text-sky-500" />
             <span>Live Recipient Preview</span>
           </div>
 
           {activeTab === 'chat' ? (
             /* Chat Inbox Simulation */
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl">
-              <div className="flex items-center gap-3 pb-3 border-b border-slate-800">
-                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold shadow-md shadow-blue-500/20">
+            <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-4 shadow-sm shadow-slate-200/40 dark:shadow-black/40">
+              <div className="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-zinc-800">
+                <div className="w-8 h-8 rounded-full bg-sky-500 flex items-center justify-center text-white text-xs font-bold shadow-sm shadow-sky-500/20">
                   Q
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-white">Qulochat Official</h4>
-                  <span className="text-[10px] text-blue-400 font-medium">Verified System Channel</span>
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-zinc-100">QuploChat Official</h4>
+                  <span className="text-[10px] text-sky-600 dark:text-sky-400 font-medium">Verified System Channel</span>
                 </div>
               </div>
 
               {/* Chat Bubble Container */}
               <div className="py-4 space-y-3">
-                <div className="bg-slate-800/90 border border-slate-700/60 rounded-2xl rounded-tl-sm p-4 text-xs text-slate-200 space-y-2.5 shadow-md">
+                <div className="bg-slate-50 dark:bg-zinc-800/80 border border-slate-200/80 dark:border-zinc-700/60 rounded-2xl rounded-tl-sm p-4 text-xs text-slate-800 dark:text-zinc-200 space-y-2.5 shadow-xs">
                   {chatBannerUrl && (
-                    <div className="rounded-lg overflow-hidden border border-slate-700/80 mb-2">
+                    <div className="rounded-lg overflow-hidden border border-slate-200 dark:border-zinc-700/80 mb-2">
                       <img
                         src={chatBannerUrl}
                         alt="Announcement Banner"
@@ -330,22 +340,22 @@ export const Broadcast: React.FC = () => {
                   )}
 
                   {chatTitle && (
-                    <p className="font-bold text-sm text-white tracking-tight border-b border-slate-700/50 pb-1.5">
+                    <p className="font-bold text-sm text-slate-900 dark:text-zinc-100 tracking-tight border-b border-slate-200/60 dark:border-zinc-700/50 pb-1.5">
                       {chatTitle}
                     </p>
                   )}
 
-                  <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">
+                  <p className="text-slate-700 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap">
                     {chatMessage || 'Your announcement message will render here in real-time.'}
                   </p>
 
-                  <div className="flex items-center justify-between pt-1 text-[10px] text-slate-400">
-                    <span className="text-blue-400 font-medium">Official Broadcast</span>
+                  <div className="flex items-center justify-between pt-1 text-[10px] text-slate-400 dark:text-zinc-500">
+                    <span className="text-sky-600 dark:text-sky-400 font-medium">Official Broadcast</span>
                     <span>Just now</span>
                   </div>
                 </div>
               </div>
-              <p className="text-[11px] text-slate-500 text-center">
+              <p className="text-[11px] text-slate-400 dark:text-zinc-500 text-center">
                 This appears in every workspace inbox with real-time audio chime & push alert.
               </p>
             </div>
@@ -353,27 +363,27 @@ export const Broadcast: React.FC = () => {
             /* Push Notification Simulation */
             <div className="space-y-4">
               {/* Mobile Push Simulation */}
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl space-y-3">
-                <div className="flex items-center justify-between text-xs text-slate-400 pb-2 border-b border-slate-800">
+              <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-4 shadow-sm shadow-slate-200/40 dark:shadow-black/40 space-y-3">
+                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-zinc-400 pb-2 border-b border-slate-100 dark:border-zinc-800">
                   <div className="flex items-center gap-1.5">
-                    <Smartphone className="w-3.5 h-3.5 text-emerald-400" />
+                    <Smartphone className="w-3.5 h-3.5 text-emerald-500" />
                     <span>Mobile Lock Screen / Banner</span>
                   </div>
                   <span className="text-[10px]">NOW</span>
                 </div>
 
-                <div className="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3.5 flex items-start gap-3 shadow-inner">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                <div className="bg-slate-50 dark:bg-zinc-950/80 border border-slate-200/80 dark:border-zinc-800/80 rounded-xl p-3.5 flex items-start gap-3 shadow-2xs">
+                  <div className="w-9 h-9 rounded-xl bg-sky-500 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm shadow-sky-500/20">
                     Q
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between">
-                      <p className="text-xs font-bold text-white truncate">
+                      <p className="text-xs font-bold text-slate-900 dark:text-zinc-100 truncate">
                         {pushTitle || 'Notification Headline'}
                       </p>
-                      <span className="text-[10px] text-slate-500">now</span>
+                      <span className="text-[10px] text-slate-400 dark:text-zinc-500">now</span>
                     </div>
-                    <p className="text-xs text-slate-300 mt-0.5 line-clamp-2">
+                    <p className="text-xs text-slate-600 dark:text-zinc-300 mt-0.5 line-clamp-2">
                       {pushBody || 'Your push notification body will appear here on subscriber devices.'}
                     </p>
                   </div>
@@ -381,23 +391,23 @@ export const Broadcast: React.FC = () => {
               </div>
 
               {/* In-App Bell simulation */}
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl space-y-3">
-                <div className="flex items-center gap-1.5 text-xs text-slate-400 pb-2 border-b border-slate-800">
-                  <Bell className="w-3.5 h-3.5 text-blue-400" />
+              <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-4 shadow-sm shadow-slate-200/40 dark:shadow-black/40 space-y-3">
+                <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-zinc-400 pb-2 border-b border-slate-100 dark:border-zinc-800">
+                  <Bell className="w-3.5 h-3.5 text-sky-500" />
                   <span>In-App Notification Center Feed</span>
                 </div>
 
-                <div className="bg-slate-800/70 border border-slate-700/50 rounded-xl p-3 flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                <div className="bg-slate-50 dark:bg-zinc-800/60 border border-slate-200/80 dark:border-zinc-700/50 rounded-xl p-3 flex items-start gap-3">
+                  <div className="w-2 h-2 rounded-full bg-sky-500 mt-1.5 shrink-0" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold text-white">
+                    <p className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
                       {pushTitle || 'Notification Headline'}
                     </p>
-                    <p className="text-xs text-slate-300 mt-0.5">
+                    <p className="text-xs text-slate-600 dark:text-zinc-300 mt-0.5">
                       {pushBody || 'Notification body text'}
                     </p>
                     {pushActionUrl && (
-                      <p className="text-[11px] text-blue-400 font-mono mt-1 underline">
+                      <p className="text-[11px] text-sky-600 dark:text-sky-400 font-mono mt-1 underline">
                         Target: {pushActionUrl}
                       </p>
                     )}
@@ -410,18 +420,18 @@ export const Broadcast: React.FC = () => {
       </div>
 
       {/* Broadcast History Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
-        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/40">
+      <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm shadow-slate-200/40 dark:shadow-black/40">
+        <div className="px-6 py-4 border-b border-slate-100 dark:border-zinc-800 flex items-center justify-between bg-slate-50/50 dark:bg-zinc-950/40">
           <div className="flex items-center gap-2.5">
-            <History className="w-4 h-4 text-blue-400" />
+            <History className="w-4 h-4 text-sky-500" />
             <div>
-              <h3 className="text-sm font-bold text-white">Broadcast Transmission History</h3>
-              <p className="text-xs text-slate-400">Previous official announcements and global push dispatches</p>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-50">Broadcast Transmission History</h3>
+              <p className="text-xs text-slate-500 dark:text-zinc-400">Previous official announcements and global push dispatches</p>
             </div>
           </div>
           <button
             onClick={() => refetchHistory()}
-            className="text-xs font-medium text-slate-400 hover:text-white transition cursor-pointer"
+            className="text-xs font-medium text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition cursor-pointer"
           >
             Refresh History
           </button>
@@ -429,7 +439,7 @@ export const Broadcast: React.FC = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-950/60 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+            <thead className="bg-slate-50 dark:bg-zinc-950/60 text-slate-500 dark:text-zinc-400 uppercase tracking-wider font-semibold border-b border-slate-200/60 dark:border-zinc-800">
               <tr>
                 <th className="px-6 py-3">Channel Type</th>
                 <th className="px-6 py-3">Title / Subject</th>
@@ -438,33 +448,33 @@ export const Broadcast: React.FC = () => {
                 <th className="px-6 py-3">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/80">
+            <tbody className="divide-y divide-slate-100 dark:divide-zinc-800/80">
               {isLoadingHistory ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-slate-500">
-                    <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2 text-blue-400" />
+                  <td colSpan={5} className="px-6 py-8 text-center text-slate-400 dark:text-zinc-500">
+                    <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2 text-sky-500" />
                     <span>Loading transmission logs...</span>
                   </td>
                 </tr>
               ) : history && history.length > 0 ? (
                 history.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-800/40 transition-colors">
+                  <tr key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-zinc-800/40 transition-colors">
                     <td className="px-6 py-3.5">
                       <Badge variant={item.type === 'OFFICIAL_CHAT' ? 'primary' : 'success'}>
                         {item.type === 'OFFICIAL_CHAT' ? 'Official Chat' : 'In-App Push'}
                       </Badge>
                     </td>
-                    <td className="px-6 py-3.5 font-semibold text-slate-200">
+                    <td className="px-6 py-3.5 font-semibold text-slate-900 dark:text-zinc-100">
                       {item.title || 'Official Announcement'}
                     </td>
-                    <td className="px-6 py-3.5 text-slate-400 max-w-md truncate">
+                    <td className="px-6 py-3.5 text-slate-500 dark:text-zinc-400 max-w-md truncate">
                       {item.message}
                     </td>
-                    <td className="px-6 py-3.5 text-slate-400 font-mono text-[11px]">
+                    <td className="px-6 py-3.5 text-slate-400 dark:text-zinc-500 font-mono text-[11px]">
                       {new Date(item.createdAt).toLocaleString()}
                     </td>
                     <td className="px-6 py-3.5">
-                      <span className="inline-flex items-center gap-1 text-emerald-400 font-medium">
+                      <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
                         <CheckCircle className="w-3.5 h-3.5" />
                         <span>Delivered</span>
                       </span>
@@ -473,7 +483,7 @@ export const Broadcast: React.FC = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-slate-500">
+                  <td colSpan={5} className="px-6 py-8 text-center text-slate-400 dark:text-zinc-500">
                     No broadcast transmissions sent yet
                   </td>
                 </tr>
@@ -490,34 +500,34 @@ export const Broadcast: React.FC = () => {
         title="Confirm Mass System Broadcast"
       >
         <div className="space-y-4">
-          <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-            <div className="text-xs text-amber-300">
-              <p className="font-semibold text-amber-200">Platform-Wide Distribution Warning</p>
+          <div className="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+            <div className="text-xs text-amber-800 dark:text-amber-300">
+              <p className="font-semibold text-amber-900 dark:text-amber-200">Platform-Wide Distribution Warning</p>
               <p className="mt-0.5">
                 This action will broadcast this message to{' '}
-                <strong className="text-white">every workspace and user</strong> across the entire
+                <strong className="text-amber-950 dark:text-white">every workspace and user</strong> across the entire
                 system. It cannot be recalled once dispatched.
               </p>
             </div>
           </div>
 
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
+          <div className="bg-slate-50 dark:bg-zinc-950 p-4 rounded-xl border border-slate-200 dark:border-zinc-800 space-y-2 text-xs">
             <div>
-              <span className="text-slate-400">Target Channel:</span>{' '}
-              <span className="font-bold text-white">
+              <span className="text-slate-500 dark:text-zinc-400">Target Channel:</span>{' '}
+              <span className="font-bold text-slate-900 dark:text-zinc-100">
                 {activeTab === 'chat' ? 'Official Inboxes (System Conversation)' : 'In-App & Push Alerts'}
               </span>
             </div>
             <div>
-              <span className="text-slate-400">Headline:</span>{' '}
-              <span className="font-bold text-white">
+              <span className="text-slate-500 dark:text-zinc-400">Headline:</span>{' '}
+              <span className="font-bold text-slate-900 dark:text-zinc-100">
                 {activeTab === 'chat' ? chatTitle || 'Official Announcement' : pushTitle}
               </span>
             </div>
             <div>
-              <span className="text-slate-400">Message Body:</span>
-              <p className="text-slate-300 mt-1 italic line-clamp-3">
+              <span className="text-slate-500 dark:text-zinc-400">Message Body:</span>
+              <p className="text-slate-700 dark:text-zinc-300 mt-1 italic line-clamp-3">
                 "{activeTab === 'chat' ? chatMessage : pushBody}"
               </p>
             </div>
@@ -527,7 +537,7 @@ export const Broadcast: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowConfirmModal(false)}
-              className="px-4 py-2 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 transition cursor-pointer"
+              className="px-4 py-2 rounded-xl text-xs font-medium text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 transition cursor-pointer"
             >
               Cancel
             </button>
@@ -535,7 +545,7 @@ export const Broadcast: React.FC = () => {
               type="button"
               disabled={isSending}
               onClick={handleExecuteBroadcast}
-              className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 transition shadow-lg shadow-blue-600/30 flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 transition shadow-sm shadow-sky-500/20 flex items-center gap-2 cursor-pointer disabled:opacity-50"
             >
               {isSending ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />

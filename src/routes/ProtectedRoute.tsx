@@ -8,8 +8,8 @@ export const ProtectedRoute: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-400 gap-3">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+      <div className="min-h-screen bg-gray-50 dark:bg-black flex flex-col items-center justify-center text-slate-600 dark:text-zinc-400 gap-3 transition-colors">
+        <Loader2 className="w-8 h-8 animate-spin text-sky-500" />
         <span className="text-sm font-medium tracking-wide">Authenticating Admin Session...</span>
       </div>
     );

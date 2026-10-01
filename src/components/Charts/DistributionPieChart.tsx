@@ -7,6 +7,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts';
+import { useTheme } from '../../context/ThemeContext';
 
 interface DistributionItem {
   name: string;
@@ -20,11 +21,13 @@ interface DistributionPieChartProps {
 }
 
 export const DistributionPieChart: React.FC<DistributionPieChartProps> = ({ data, title }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const total = data.reduce((sum, item) => sum + item.value, 0);
 
   if (total === 0) {
     return (
-      <div className="h-60 flex flex-col items-center justify-center text-slate-500 text-sm">
+      <div className="h-60 flex flex-col items-center justify-center text-slate-400 dark:text-zinc-500 text-sm">
         <span>No distribution data available</span>
       </div>
     );
@@ -33,7 +36,7 @@ export const DistributionPieChart: React.FC<DistributionPieChartProps> = ({ data
   return (
     <div className="h-60 w-full relative">
       {title && (
-        <div className="absolute top-0 left-0 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+        <div className="absolute top-0 left-0 text-xs font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">
           {title}
         </div>
       )}
@@ -49,7 +52,12 @@ export const DistributionPieChart: React.FC<DistributionPieChartProps> = ({ data
             dataKey="value"
           >
             {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color} stroke="#0f172a" strokeWidth={2} />
+              <Cell
+                key={`cell-${index}`}
+                fill={entry.color}
+                stroke={isDark ? '#09090b' : '#ffffff'}
+                strokeWidth={2}
+              />
             ))}
           </Pie>
           <Tooltip
@@ -58,16 +66,22 @@ export const DistributionPieChart: React.FC<DistributionPieChartProps> = ({ data
               'Count',
             ]}
             contentStyle={{
-              backgroundColor: '#0f172a',
-              borderColor: '#334155',
-              borderRadius: '8px',
+              backgroundColor: isDark ? '#09090b' : '#ffffff',
+              borderColor: isDark ? '#27272a' : '#e2e8f0',
+              borderRadius: '10px',
               fontSize: '12px',
+              color: isDark ? '#f4f4f5' : '#0f172a',
+              boxShadow: isDark
+                ? '0 10px 25px -5px rgba(0, 0, 0, 0.6)'
+                : '0 10px 25px -5px rgba(0, 0, 0, 0.08)',
             }}
           />
           <Legend
             verticalAlign="bottom"
             height={36}
-            formatter={(val) => <span className="text-slate-300 text-xs font-medium">{val}</span>}
+            formatter={(val) => (
+              <span className="text-slate-700 dark:text-zinc-300 text-xs font-medium">{val}</span>
+            )}
           />
         </PieChart>
       </ResponsiveContainer>
