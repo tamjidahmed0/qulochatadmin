@@ -7,7 +7,6 @@ import {
   Activity,
   Settings,
   LogOut,
-  ShieldCheck,
 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AuthContext';
 
@@ -43,20 +42,13 @@ export const AdminSidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         }`}
       >
         {/* Brand Header */}
-        <div className="h-16 px-6 border-b border-slate-100 dark:border-zinc-800/50 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-sky-500 flex items-center justify-center text-white shadow-md shadow-sky-500/20">
-              <ShieldCheck className="w-5 h-5 stroke-[2.25]" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-slate-900 dark:text-zinc-50 tracking-tight">QuploChat</span>
-                <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-sky-50 text-sky-700 dark:bg-sky-500/15 dark:text-sky-400 border border-sky-200/60 dark:border-sky-500/20 rounded">
-                  ADMIN
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 dark:text-zinc-500">Master Control Console</p>
-            </div>
+        <div className="h-16 px-6 border-b border-slate-100 dark:border-zinc-800/50 flex items-center">
+          <div className="flex items-center justify-center w-10 h-10 shrink-0">
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="w-8 h-8 object-contain drop-shadow-xs select-none pointer-events-none"
+            />
           </div>
         </div>
 

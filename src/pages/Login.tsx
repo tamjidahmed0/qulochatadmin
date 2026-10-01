@@ -81,10 +81,14 @@ export const Login: React.FC = () => {
       <div className="w-full max-w-md relative z-10">
         {/* Logo and Brand */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-sky-500 shadow-xl shadow-sky-500/25 text-white mb-4">
-            <Shield className="w-7 h-7 stroke-[2.25]" />
+          <div className="flex items-center justify-center mb-4">
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="w-14 h-14 object-contain drop-shadow-md select-none pointer-events-none"
+            />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50 tracking-tight">QuploChat Admin</h1>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50 tracking-tight">Admin Console</h1>
           <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1.5 flex items-center justify-center gap-1.5 font-medium">
             <KeyRound className="w-3.5 h-3.5 text-sky-500" />
             <span>Master Console • Restricted Access Only</span>

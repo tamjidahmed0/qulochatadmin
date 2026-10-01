@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, KeyRound, Lock, User, Mail, Save, CheckCircle, Loader2, Sun, Moon } from 'lucide-react';
+import { KeyRound, Lock, User, Mail, Save, Loader2, Sun, Moon } from 'lucide-react';
 import { useAdminAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useUpdateAdminCredentials } from '../hooks';
@@ -160,48 +160,13 @@ export const Settings: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Security Policy Card (1 col) */}
-        <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-5 shadow-sm shadow-slate-200/40 dark:shadow-black/40 space-y-4">
-          <div className="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-500/10 border border-sky-200/60 dark:border-sky-500/20 flex items-center justify-center text-sky-600 dark:text-sky-400">
-            <Shield className="w-5 h-5 stroke-[2.25]" />
-          </div>
-          <div>
-            <h4 className="text-sm font-bold text-slate-900 dark:text-zinc-100">Active Defense Policy</h4>
-            <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">Configured security safeguards</p>
-          </div>
-
-          <div className="space-y-3 text-xs border-t border-slate-100 dark:border-zinc-800 pt-4">
-            <div className="flex items-start gap-2 text-slate-700 dark:text-zinc-300">
-              <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-              <span>
-                <strong>Rate Limiting:</strong> 5 max failed attempts before automatic 15-minute IP
-                lockout
-              </span>
-            </div>
-            <div className="flex items-start gap-2 text-slate-700 dark:text-zinc-300">
-              <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-              <span>
-                <strong>Zero Public Signup:</strong> Registration routes are permanently disabled
-                for the admin console
-              </span>
-            </div>
-            <div className="flex items-start gap-2 text-slate-700 dark:text-zinc-300">
-              <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-              <span>
-                <strong>Bcrypt Hashing:</strong> Passwords hashed with 12 computational rounds
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Update Form (2 cols) */}
-        <div className="md:col-span-2 bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 shadow-sm shadow-slate-200/40 dark:shadow-black/40">
-          <form onSubmit={handleUpdate} className="space-y-5">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100 pb-3 border-b border-slate-100 dark:border-zinc-800 flex items-center gap-2">
-              <KeyRound className="w-4 h-4 text-sky-500" />
-              <span>Configure Admin Account</span>
-            </h3>
+      {/* Update Form */}
+      <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 shadow-sm shadow-slate-200/40 dark:shadow-black/40">
+        <form onSubmit={handleUpdate} className="space-y-5">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100 pb-3 border-b border-slate-100 dark:border-zinc-800 flex items-center gap-2">
+            <KeyRound className="w-4 h-4 text-sky-500" />
+            <span>Configure Admin Account</span>
+          </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -326,6 +291,5 @@ export const Settings: React.FC = () => {
           </form>
         </div>
       </div>
-    </div>
-  );
+    );
 };
