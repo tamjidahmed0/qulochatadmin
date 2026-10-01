@@ -105,6 +105,35 @@ export interface BroadcastItem {
   createdAt: string;
 }
 
+export interface StorageHealthData {
+  name: string;
+  provider: string;
+  status: 'healthy' | 'degraded' | 'unconfigured';
+  latencyMs: number;
+  bucket: string;
+  region: string;
+  endpoint: string;
+  publicUrl: string;
+  uploadProtocol: string;
+  presignedTtlSeconds: number;
+  error?: string | null;
+  stats: {
+    totalFiles: number;
+    totalSizeBytes: number;
+    totalSizeMB: number;
+    imagesCount: number;
+    audioCount: number;
+    documentsCount: number;
+    brainDocsCount: number;
+    widgetLogosCount: number;
+  };
+  rateLimits: {
+    ipLimitPerMin: number;
+    visitorLimitPerMin: number;
+  };
+  allowedExtensions: string[];
+}
+
 export interface SystemHealthData {
   status: 'operational' | 'degraded' | 'critical';
   timestamp: string;
@@ -121,6 +150,7 @@ export interface SystemHealthData {
       latencyMs: number;
       error?: string | null;
     };
+    storage?: StorageHealthData;
   };
   memory: {
     rssMB: number;
@@ -145,5 +175,8 @@ export interface SystemHealthData {
     totalMemoryMB: number;
     systemUptimeHours: number;
   };
-  integrations: Record<string, { name: string; configured: boolean }>;
+  integrations: Record<
+    string,
+    { name: string; configured: boolean; bucket?: string; endpoint?: string; publicUrl?: string; region?: string }
+  >;
 }
