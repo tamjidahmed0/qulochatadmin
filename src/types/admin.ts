@@ -124,8 +124,9 @@ export interface StorageHealthData {
     imagesCount: number;
     audioCount: number;
     documentsCount: number;
-    brainDocsCount: number;
-    widgetLogosCount: number;
+    otherCount?: number;
+    brainDocsCount?: number;
+    widgetLogosCount?: number;
   };
   rateLimits: {
     ipLimitPerMin: number;

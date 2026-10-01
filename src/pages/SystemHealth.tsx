@@ -339,7 +339,7 @@ export const SystemHealth: React.FC = () => {
                   {storage?.stats?.totalFiles ?? 0}
                 </span>
                 <span className="text-[10px] text-slate-500 dark:text-zinc-400 block">
-                  Across chats & docs
+                  Live Cloudflare R2 objects
                 </span>
               </div>
 
@@ -530,9 +530,9 @@ export const SystemHealth: React.FC = () => {
                       <Sparkles className="w-4 h-4" />
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 dark:text-zinc-500 block uppercase font-semibold">Brain Docs</span>
+                      <span className="text-[10px] text-slate-400 dark:text-zinc-500 block uppercase font-semibold">Total Objects</span>
                       <span className="font-mono font-bold text-slate-900 dark:text-zinc-100">
-                        {storage?.stats?.brainDocsCount ?? 0} synced
+                        {storage?.stats?.totalFiles ?? 0} in bucket
                       </span>
                     </div>
                   </div>
