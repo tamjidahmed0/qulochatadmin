@@ -42,14 +42,17 @@ export const AdminSidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         }`}
       >
         {/* Brand Header */}
-        <div className="h-16 px-6 border-b border-slate-100 dark:border-zinc-800/50 flex items-center">
-          <div className="flex items-center justify-center w-10 h-10 shrink-0">
+        <div className="h-16 px-5 border-b border-slate-100 dark:border-zinc-800/50 flex items-center gap-2.5">
+          <div className="flex items-center justify-center w-9 h-9 shrink-0">
             <img
               src="/logo.png"
-              alt="Logo"
+              alt="Qulochat Logo"
               className="w-8 h-8 object-contain drop-shadow-xs select-none pointer-events-none"
             />
           </div>
+          <span className="font-bold text-base tracking-tight text-slate-900 dark:text-zinc-50 select-none">
+            Qulochat
+          </span>
         </div>
 
         {/* Nav Links */}
