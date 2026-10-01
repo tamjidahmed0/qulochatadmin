@@ -1,6 +1,6 @@
 import React from 'react';
-import { Menu, Megaphone, Sun, Moon } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Menu, Sun, Moon } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -12,7 +12,6 @@ export const AdminNavbar: React.FC<NavbarProps> = ({ onOpenSidebar }) => {
   const { admin } = useAdminAuth();
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
-  const navigate = useNavigate();
 
   const getPageTitle = () => {
     switch (location.pathname) {
@@ -52,17 +51,6 @@ export const AdminNavbar: React.FC<NavbarProps> = ({ onOpenSidebar }) => {
 
       {/* Right Controls */}
       <div className="flex items-center gap-2.5 sm:gap-3">
-        {/* Quick Broadcast CTA */}
-        {location.pathname !== '/broadcast' && (
-          <button
-            onClick={() => navigate('/broadcast')}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 text-white text-xs font-semibold shadow-xs shadow-sky-500/20 transition-all cursor-pointer"
-          >
-            <Megaphone className="w-3.5 h-3.5" />
-            <span>New Broadcast</span>
-          </button>
-        )}
-
         {/* Theme Toggle Button */}
         <button
           onClick={toggleTheme}

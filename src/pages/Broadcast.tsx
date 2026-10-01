@@ -8,8 +8,6 @@ import {
   CheckCircle,
   AlertTriangle,
   History,
-  Smartphone,
-  Eye,
   Loader2,
 } from 'lucide-react';
 import {
@@ -50,18 +48,12 @@ const BroadcastSkeleton: React.FC = () => (
       </div>
     </div>
 
-    {/* Broadcast Form & Live Preview Grid Skeleton */}
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 space-y-4">
-        <Skeleton className="h-4 w-48" />
-        <Skeleton className="h-9 w-full rounded-xl" />
-        <Skeleton className="h-32 w-full rounded-xl" />
-        <Skeleton className="h-10 w-36 rounded-xl" />
-      </div>
-      <div className="lg:col-span-5 bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 space-y-4">
-        <Skeleton className="h-4 w-40" />
-        <Skeleton className="h-56 w-full rounded-2xl" />
-      </div>
+    {/* Broadcast Form Skeleton (Full-Width Clean Card) */}
+    <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 sm:p-7 space-y-4">
+      <Skeleton className="h-4 w-48" />
+      <Skeleton className="h-10 w-full rounded-xl" />
+      <Skeleton className="h-36 w-full rounded-xl" />
+      <Skeleton className="h-10 w-full rounded-xl" />
     </div>
 
     {/* History Table Skeleton */}
@@ -145,7 +137,7 @@ export const Broadcast: React.FC = () => {
     }
   };
 
-  if (isLoadingHistory && !history) {
+  if (isLoadingHistory && (!history || history.length === 0)) {
     return <BroadcastSkeleton />;
   }
 
@@ -226,256 +218,140 @@ export const Broadcast: React.FC = () => {
         </button>
       </div>
 
-      {/* Broadcast Form & Live Preview Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Left: Input Form (7 cols) */}
-        <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 shadow-sm shadow-slate-200/40 dark:shadow-black/40">
-          <div className="flex items-center gap-2.5 mb-5 pb-4 border-b border-slate-100 dark:border-zinc-800">
-            {activeTab === 'chat' ? (
-              <Megaphone className="w-5 h-5 text-sky-500 stroke-[2.25]" />
-            ) : (
-              <Bell className="w-5 h-5 text-emerald-500 stroke-[2.25]" />
-            )}
-            <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">
-                {activeTab === 'chat' ? 'Compose Official Chat Announcement' : 'Compose In-App & Push Notification'}
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-zinc-400">
-                {activeTab === 'chat'
-                  ? 'Delivers to every workspace owner in their system channel'
-                  : 'Delivers to all active users on web and mobile'}
-              </p>
-            </div>
-          </div>
-
-          <form onSubmit={handleOpenConfirm} className="space-y-4">
-            {activeTab === 'chat' ? (
-              <>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5">
-                    Announcement Headline (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    value={chatTitle}
-                    onChange={(e) => setChatTitle(e.target.value)}
-                    placeholder="e.g., 🎉 Version 2.5 Released: AI Voice Live Talk"
-                    className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5">
-                    Announcement Message (Markdown supported) <span className="text-rose-500">*</span>
-                  </label>
-                  <textarea
-                    rows={6}
-                    required
-                    value={chatMessage}
-                    onChange={(e) => setChatMessage(e.target.value)}
-                    placeholder="Write your official update, feature release notes, or system news..."
-                    className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition font-sans"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5 flex items-center gap-1.5">
-                    <Image className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" />
-                    <span>Banner Image or Attachment URL (Optional)</span>
-                  </label>
-                  <input
-                    type="url"
-                    value={chatBannerUrl}
-                    onChange={(e) => setChatBannerUrl(e.target.value)}
-                    placeholder="https://cdn.example.com/banner.jpg"
-                    className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition font-mono text-xs"
-                  />
-                </div>
-              </>
-            ) : (
-              <>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5">
-                    Notification Title <span className="text-rose-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={pushTitle}
-                    onChange={(e) => setPushTitle(e.target.value)}
-                    placeholder="e.g., Scheduled Server Maintenance Notice"
-                    className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5">
-                    Notification Message Body <span className="text-rose-500">*</span>
-                  </label>
-                  <textarea
-                    rows={4}
-                    required
-                    value={pushBody}
-                    onChange={(e) => setPushBody(e.target.value)}
-                    placeholder="e.g., We will perform database maintenance tonight at 2:00 AM UTC. Estimated downtime is under 5 minutes."
-                    className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5 flex items-center gap-1.5">
-                    <Link2 className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" />
-                    <span>Action URL (Optional Link on click)</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={pushActionUrl}
-                    onChange={(e) => setPushActionUrl(e.target.value)}
-                    placeholder="/settings or https://quplochat.com/news"
-                    className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition font-mono text-xs"
-                  />
-                </div>
-              </>
-            )}
-
-            <div className="pt-3">
-              <button
-                type="submit"
-                disabled={isSending}
-                className={`w-full py-3 px-4 rounded-xl text-white font-semibold text-sm transition flex items-center justify-center gap-2 shadow-sm cursor-pointer disabled:opacity-50 ${
-                  activeTab === 'chat'
-                    ? 'bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 shadow-sky-500/20'
-                    : 'bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-400 shadow-emerald-500/20'
-                }`}
-              >
-                {isSending ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Transmitting Broadcast...</span>
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4" />
-                    <span>Preview & Confirm Broadcast</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
-        </div>
-
-        {/* Right: Live Realistic Device Mockup Preview (5 cols) */}
-        <div className="lg:col-span-5 flex flex-col justify-start space-y-4">
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">
-            <Eye className="w-4 h-4 text-sky-500" />
-            <span>Live Recipient Preview</span>
-          </div>
-
+      {/* Broadcast Form (Full-Width Card) */}
+      <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 sm:p-7 shadow-sm shadow-slate-200/40 dark:shadow-black/40">
+        <div className="flex items-center gap-2.5 mb-5 pb-4 border-b border-slate-100 dark:border-zinc-800">
           {activeTab === 'chat' ? (
-            /* Chat Inbox Simulation */
-            <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-4 shadow-sm shadow-slate-200/40 dark:shadow-black/40">
-              <div className="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-zinc-800">
-                <div className="w-8 h-8 rounded-full bg-sky-500 flex items-center justify-center text-white text-xs font-bold shadow-sm shadow-sky-500/20">
-                  Q
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-zinc-100">QuploChat Official</h4>
-                  <span className="text-[10px] text-sky-600 dark:text-sky-400 font-medium">Verified System Channel</span>
-                </div>
-              </div>
-
-              {/* Chat Bubble Container */}
-              <div className="py-4 space-y-3">
-                <div className="bg-slate-50 dark:bg-zinc-800/80 border border-slate-200/80 dark:border-zinc-700/60 rounded-2xl rounded-tl-sm p-4 text-xs text-slate-800 dark:text-zinc-200 space-y-2.5 shadow-xs">
-                  {chatBannerUrl && (
-                    <div className="rounded-lg overflow-hidden border border-slate-200 dark:border-zinc-700/80 mb-2">
-                      <img
-                        src={chatBannerUrl}
-                        alt="Announcement Banner"
-                        className="w-full max-h-48 object-cover"
-                        onError={(e) => ((e.target as HTMLElement).style.display = 'none')}
-                      />
-                    </div>
-                  )}
-
-                  {chatTitle && (
-                    <p className="font-bold text-sm text-slate-900 dark:text-zinc-100 tracking-tight border-b border-slate-200/60 dark:border-zinc-700/50 pb-1.5">
-                      {chatTitle}
-                    </p>
-                  )}
-
-                  <p className="text-slate-700 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap">
-                    {chatMessage || 'Your announcement message will render here in real-time.'}
-                  </p>
-
-                  <div className="flex items-center justify-between pt-1 text-[10px] text-slate-400 dark:text-zinc-500">
-                    <span className="text-sky-600 dark:text-sky-400 font-medium">Official Broadcast</span>
-                    <span>Just now</span>
-                  </div>
-                </div>
-              </div>
-              <p className="text-[11px] text-slate-400 dark:text-zinc-500 text-center">
-                This appears in every workspace inbox with real-time audio chime & push alert.
-              </p>
-            </div>
+            <Megaphone className="w-5 h-5 text-sky-500 stroke-[2.25]" />
           ) : (
-            /* Push Notification Simulation */
-            <div className="space-y-4">
-              {/* Mobile Push Simulation */}
-              <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-4 shadow-sm shadow-slate-200/40 dark:shadow-black/40 space-y-3">
-                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-zinc-400 pb-2 border-b border-slate-100 dark:border-zinc-800">
-                  <div className="flex items-center gap-1.5">
-                    <Smartphone className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>Mobile Lock Screen / Banner</span>
-                  </div>
-                  <span className="text-[10px]">NOW</span>
-                </div>
-
-                <div className="bg-slate-50 dark:bg-zinc-950/80 border border-slate-200/80 dark:border-zinc-800/80 rounded-xl p-3.5 flex items-start gap-3 shadow-2xs">
-                  <div className="w-9 h-9 rounded-xl bg-sky-500 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm shadow-sky-500/20">
-                    Q
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-between">
-                      <p className="text-xs font-bold text-slate-900 dark:text-zinc-100 truncate">
-                        {pushTitle || 'Notification Headline'}
-                      </p>
-                      <span className="text-[10px] text-slate-400 dark:text-zinc-500">now</span>
-                    </div>
-                    <p className="text-xs text-slate-600 dark:text-zinc-300 mt-0.5 line-clamp-2">
-                      {pushBody || 'Your push notification body will appear here on subscriber devices.'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* In-App Bell simulation */}
-              <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-4 shadow-sm shadow-slate-200/40 dark:shadow-black/40 space-y-3">
-                <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-zinc-400 pb-2 border-b border-slate-100 dark:border-zinc-800">
-                  <Bell className="w-3.5 h-3.5 text-sky-500" />
-                  <span>In-App Notification Center Feed</span>
-                </div>
-
-                <div className="bg-slate-50 dark:bg-zinc-800/60 border border-slate-200/80 dark:border-zinc-700/50 rounded-xl p-3 flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-sky-500 mt-1.5 shrink-0" />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
-                      {pushTitle || 'Notification Headline'}
-                    </p>
-                    <p className="text-xs text-slate-600 dark:text-zinc-300 mt-0.5">
-                      {pushBody || 'Notification body text'}
-                    </p>
-                    {pushActionUrl && (
-                      <p className="text-[11px] text-sky-600 dark:text-sky-400 font-mono mt-1 underline">
-                        Target: {pushActionUrl}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Bell className="w-5 h-5 text-emerald-500 stroke-[2.25]" />
           )}
+          <div>
+            <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">
+              {activeTab === 'chat' ? 'Compose Official Chat Announcement' : 'Compose In-App & Push Notification'}
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-zinc-400">
+              {activeTab === 'chat'
+                ? 'Delivers to every workspace owner in their system channel'
+                : 'Delivers to all active users on web and mobile'}
+            </p>
+          </div>
         </div>
+
+        <form onSubmit={handleOpenConfirm} className="space-y-4">
+          {activeTab === 'chat' ? (
+            <>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5">
+                  Announcement Headline (Optional)
+                </label>
+                <input
+                  type="text"
+                  value={chatTitle}
+                  onChange={(e) => setChatTitle(e.target.value)}
+                  placeholder="e.g., 🎉 Version 2.5 Released: AI Voice Live Talk"
+                  className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5">
+                  Announcement Message (Markdown supported) <span className="text-rose-500">*</span>
+                </label>
+                <textarea
+                  rows={6}
+                  required
+                  value={chatMessage}
+                  onChange={(e) => setChatMessage(e.target.value)}
+                  placeholder="Write your official update, feature release notes, or system news..."
+                  className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition font-sans"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5 flex items-center gap-1.5">
+                  <Image className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" />
+                  <span>Banner Image or Attachment URL (Optional)</span>
+                </label>
+                <input
+                  type="url"
+                  value={chatBannerUrl}
+                  onChange={(e) => setChatBannerUrl(e.target.value)}
+                  placeholder="https://cdn.example.com/banner.jpg"
+                  className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition font-mono text-xs"
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5">
+                  Notification Title <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={pushTitle}
+                  onChange={(e) => setPushTitle(e.target.value)}
+                  placeholder="e.g., Scheduled Server Maintenance Notice"
+                  className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5">
+                  Notification Message Body <span className="text-rose-500">*</span>
+                </label>
+                <textarea
+                  rows={4}
+                  required
+                  value={pushBody}
+                  onChange={(e) => setPushBody(e.target.value)}
+                  placeholder="e.g., We will perform database maintenance tonight at 2:00 AM UTC. Estimated downtime is under 5 minutes."
+                  className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1.5 flex items-center gap-1.5">
+                  <Link2 className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" />
+                  <span>Action URL (Optional Link on click)</span>
+                </label>
+                <input
+                  type="text"
+                  value={pushActionUrl}
+                  onChange={(e) => setPushActionUrl(e.target.value)}
+                  placeholder="/settings or https://quplochat.com/news"
+                  className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition font-mono text-xs"
+                />
+              </div>
+            </>
+          )}
+
+          <div className="pt-3">
+            <button
+              type="submit"
+              disabled={isSending}
+              className={`w-full py-3 px-4 rounded-xl text-white font-semibold text-sm transition flex items-center justify-center gap-2 shadow-sm cursor-pointer disabled:opacity-50 ${
+                activeTab === 'chat'
+                  ? 'bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 shadow-sky-500/20'
+                  : 'bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-400 shadow-emerald-500/20'
+              }`}
+            >
+              {isSending ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Transmitting Broadcast...</span>
+                </>
+              ) : (
+                <>
+                  <Send className="w-4 h-4" />
+                  <span>Preview & Confirm Broadcast</span>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
       </div>
 
       {/* Broadcast History Table */}
