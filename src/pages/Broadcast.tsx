@@ -19,6 +19,7 @@ import {
 } from '../hooks';
 import { Badge } from '../components/Common/Badge';
 import { Modal } from '../components/Common/Modal';
+import { Skeleton } from '../components/Common/Skeleton';
 import { toast } from 'sonner';
 
 export const Broadcast: React.FC = () => {
@@ -450,12 +451,25 @@ export const Broadcast: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-zinc-800/80">
               {isLoadingHistory ? (
-                <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-slate-400 dark:text-zinc-500">
-                    <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2 text-sky-500" />
-                    <span>Loading transmission logs...</span>
-                  </td>
-                </tr>
+                Array.from({ length: 4 }).map((_, idx) => (
+                  <tr key={idx} className="animate-in fade-in duration-200">
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-5 w-20 rounded-full" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-4 w-36 rounded" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-3.5 w-64 rounded" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-3.5 w-28 rounded" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-4 w-16 rounded" />
+                    </td>
+                  </tr>
+                ))
               ) : history && history.length > 0 ? (
                 history.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-zinc-800/40 transition-colors">

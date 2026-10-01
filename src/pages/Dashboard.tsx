@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Users,
-  MessageSquare,
-  MessageCircle,
-  Smile,
   RefreshCw,
   AppWindow,
   Globe,
@@ -14,10 +10,105 @@ import {
 import { useAnalyticsOverview } from '../hooks';
 import { StatCard } from '../components/Common/StatCard';
 import { Badge } from '../components/Common/Badge';
+import { Skeleton } from '../components/Common/Skeleton';
 import { MessageVolumeChart } from '../components/Charts/MessageVolumeChart';
 import { UserGrowthChart } from '../components/Charts/UserGrowthChart';
 import { DistributionPieChart } from '../components/Charts/DistributionPieChart';
 import { useNavigate } from 'react-router-dom';
+
+function DashboardSkeleton() {
+  return (
+    <div className="space-y-7 animate-pulse">
+      {/* Top Bar Skeleton */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-2">
+          <Skeleton className="h-6 w-48" />
+          <Skeleton className="h-3.5 w-72" />
+        </div>
+        <Skeleton className="h-9 w-64 rounded-xl" />
+      </div>
+
+      {/* KPI Cards Skeleton */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="bg-white dark:bg-zinc-900 border border-slate-200/70 dark:border-zinc-800/80 rounded-2xl p-6 space-y-4"
+          >
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-3 w-24" />
+              <Skeleton className="h-5 w-12 rounded-full" />
+            </div>
+            <Skeleton className="h-9 w-28" />
+            <Skeleton className="h-3 w-36" />
+          </div>
+        ))}
+      </div>
+
+      {/* Secondary Metrics Skeleton */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white dark:bg-zinc-900/60 border border-slate-200/60 dark:border-zinc-800/80 rounded-2xl p-4">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="flex items-center gap-3 p-2">
+            <Skeleton className="w-9 h-9 rounded-xl shrink-0" />
+            <div className="space-y-1.5 flex-1">
+              <Skeleton className="h-3 w-16" />
+              <Skeleton className="h-5 w-10" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Charts Row Skeleton */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 space-y-4">
+          <Skeleton className="h-4 w-44" />
+          <Skeleton className="h-64 w-full rounded-xl" />
+        </div>
+        <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 space-y-4">
+          <Skeleton className="h-4 w-36" />
+          <Skeleton className="h-64 w-full rounded-xl" />
+        </div>
+      </div>
+
+      {/* Distribution Skeletons */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 space-y-4"
+          >
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-48 w-full rounded-xl" />
+          </div>
+        ))}
+      </div>
+
+      {/* Table Skeleton */}
+      <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 space-y-4">
+        <div className="flex justify-between items-center">
+          <Skeleton className="h-4 w-44" />
+          <Skeleton className="h-4 w-20" />
+        </div>
+        <div className="space-y-3 pt-2">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="flex justify-between items-center py-2 border-b border-slate-100 dark:border-zinc-800/60">
+              <div className="flex items-center gap-3">
+                <Skeleton className="w-8 h-8 rounded-full" />
+                <div className="space-y-1">
+                  <Skeleton className="h-3.5 w-28" />
+                  <Skeleton className="h-2.5 w-36" />
+                </div>
+              </div>
+              <Skeleton className="h-5 w-16 rounded-md" />
+              <Skeleton className="h-5 w-16 rounded-md" />
+              <Skeleton className="h-3 w-20" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -27,11 +118,15 @@ export const Dashboard: React.FC = () => {
   const { data, isLoading, isFetching, error, refetch } = useAnalyticsOverview(range);
 
   const ranges = [
-    { key: '7d', label: 'Last 7 Days' },
-    { key: '30d', label: 'Last 30 Days' },
-    { key: '90d', label: 'Last 90 Days' },
+    { key: '7d', label: '7 Days' },
+    { key: '30d', label: '30 Days' },
+    { key: '90d', label: '90 Days' },
     { key: 'all', label: 'All Time' },
   ];
+
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
 
   return (
     <div className="space-y-7">
@@ -39,9 +134,9 @@ export const Dashboard: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-zinc-50 tracking-tight">
-            Platform Analytics & Metrics
+            Platform Overview
           </h2>
-          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">
+          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
             Real-time aggregate data across all workspaces, users, and conversations
           </p>
         </div>
@@ -55,7 +150,7 @@ export const Dashboard: React.FC = () => {
                 onClick={() => setRange(r.key)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer ${
                   range === r.key
-                    ? 'bg-sky-500 text-white shadow-xs'
+                    ? 'bg-sky-500 text-white shadow-xs font-semibold'
                     : 'text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100'
                 }`}
               >
@@ -82,42 +177,28 @@ export const Dashboard: React.FC = () => {
         </div>
       )}
 
-      {/* KPI Stat Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* KPI Stat Cards (Clean 3-column layout without gradient icon squares) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
         <StatCard
           title="Total Users"
-          value={isLoading ? '...' : (data?.kpis.totalUsers.value ?? '—')}
+          value={data?.kpis.totalUsers.value}
           subtitle={`${data?.kpis.totalUsers.active ?? 0} Active • ${data?.kpis.totalUsers.inactive ?? 0} Inactive`}
           trend={data?.kpis.totalUsers.trend}
           trendUp={data?.kpis.totalUsers.trendUp}
-          icon={Users}
-          colorClass="from-sky-500 to-sky-600"
         />
 
         <StatCard
           title="Total Messages Exchanged"
-          value={isLoading ? '...' : (data?.kpis.totalMessages.value ?? '—')}
+          value={data?.kpis.totalMessages.value}
           subtitle={`${(data?.kpis.totalMessages.periodCount ?? 0).toLocaleString()} in this period`}
           trend={data?.kpis.totalMessages.trend}
           trendUp={data?.kpis.totalMessages.trendUp}
-          icon={MessageSquare}
-          colorClass="from-emerald-500 to-emerald-600"
         />
 
         <StatCard
           title="Total Conversations"
-          value={isLoading ? '...' : (data?.kpis.totalConversations.value ?? '—')}
+          value={data?.kpis.totalConversations.value}
           subtitle={`${data?.kpis.totalConversations.active ?? 0} Active • ${data?.kpis.totalConversations.closed ?? 0} Closed`}
-          icon={MessageCircle}
-          colorClass="from-purple-500 to-purple-600"
-        />
-
-        <StatCard
-          title="Satisfaction Rating (CSAT)"
-          value={isLoading ? '...' : `${data?.kpis.satisfaction.score ?? 0}%`}
-          subtitle={`${data?.kpis.satisfaction.totalRatings ?? 0} ratings received`}
-          icon={Smile}
-          colorClass="from-amber-500 to-amber-600"
         />
       </div>
 
@@ -279,7 +360,7 @@ export const Dashboard: React.FC = () => {
               ) : (
                 <tr>
                   <td colSpan={6} className="px-6 py-8 text-center text-slate-400 dark:text-zinc-500">
-                    {isLoading ? 'Loading users...' : 'No users registered yet'}
+                    No users registered yet
                   </td>
                 </tr>
               )}

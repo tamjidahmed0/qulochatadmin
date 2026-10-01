@@ -1,15 +1,14 @@
 import React from 'react';
-import type { LucideIcon } from 'lucide-react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
+import { Skeleton } from './Skeleton';
 
 interface StatCardProps {
   title: string;
-  value: string | number;
+  value?: string | number;
   subtitle?: string;
   trend?: string;
   trendUp?: boolean;
-  icon: LucideIcon;
-  colorClass?: string;
+  loading?: boolean;
 }
 
 export const StatCard: React.FC<StatCardProps> = ({
@@ -18,38 +17,57 @@ export const StatCard: React.FC<StatCardProps> = ({
   subtitle,
   trend,
   trendUp,
-  icon: Icon,
-  colorClass = 'from-sky-500 to-sky-600',
+  loading = false,
 }) => {
-  return (
-    <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-5 hover:shadow-md shadow-sm shadow-slate-200/50 dark:shadow-black/50 transition-all relative overflow-hidden group">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-xs font-medium text-slate-500 dark:text-zinc-400 uppercase tracking-wider">{title}</p>
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-zinc-50 mt-1 tracking-tight">
-            {typeof value === 'number' ? value.toLocaleString() : value}
-          </h3>
+  if (loading) {
+    return (
+      <div className="bg-white dark:bg-zinc-900 border border-slate-200/70 dark:border-zinc-800/80 rounded-2xl p-6 shadow-xs space-y-4">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-3.5 w-24" />
+          <Skeleton className="h-5 w-14 rounded-full" />
         </div>
-        <div
-          className={`w-11 h-11 rounded-xl bg-gradient-to-tr ${colorClass} flex items-center justify-center text-white shadow-md shadow-sky-500/20 group-hover:scale-105 transition-transform`}
-        >
-          <Icon className="w-5 h-5 stroke-[2.25]" />
+        <Skeleton className="h-9 w-32" />
+        <Skeleton className="h-3 w-40" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white dark:bg-zinc-900 border border-slate-200/70 dark:border-zinc-800/80 rounded-2xl p-6 shadow-xs hover:border-slate-300 dark:hover:border-zinc-700 transition-all group">
+      {/* Top Header Row: Metric Title & Trend Badge */}
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-[11px] font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">
+          {title}
+        </span>
+        {trend && (
+          <div
+            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold tracking-tight ${
+              trendUp
+                ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-500/20'
+                : 'bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400 border border-rose-200/60 dark:border-rose-500/20'
+            }`}
+          >
+            {trendUp ? (
+              <TrendingUp className="w-3 h-3 stroke-[2.5]" />
+            ) : (
+              <TrendingDown className="w-3 h-3 stroke-[2.5]" />
+            )}
+            <span>{trend}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Main Metric Value */}
+      <div className="mt-3">
+        <div className="text-3xl font-bold text-slate-900 dark:text-zinc-50 tracking-tight font-sans">
+          {typeof value === 'number' ? value.toLocaleString() : (value ?? '—')}
         </div>
       </div>
 
-      {(subtitle || trend) && (
-        <div className="mt-3 pt-3 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-xs">
-          {subtitle && <span className="text-slate-500 dark:text-zinc-400">{subtitle}</span>}
-          {trend && (
-            <div
-              className={`flex items-center gap-1 font-semibold ${
-                trendUp ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
-              }`}
-            >
-              {trendUp ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
-              <span>{trend}</span>
-            </div>
-          )}
+      {/* Subtitle / Context */}
+      {subtitle && (
+        <div className="mt-2.5 text-xs text-slate-500 dark:text-zinc-400 font-normal">
+          {subtitle}
         </div>
       )}
     </div>
