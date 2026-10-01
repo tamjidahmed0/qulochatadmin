@@ -22,9 +22,12 @@ export interface AnalyticsOverview {
     totalMessages: KPIValue;
     totalConversations: {
       value: number;
+      periodCount?: number;
       active: number;
       pending: number;
       closed: number;
+      trend?: string;
+      trendUp?: boolean;
     };
     satisfaction: {
       score: number;

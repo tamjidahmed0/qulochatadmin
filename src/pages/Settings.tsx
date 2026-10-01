@@ -3,10 +3,46 @@ import { Shield, KeyRound, Lock, User, Mail, Save, CheckCircle, Loader2, Sun, Mo
 import { useAdminAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useUpdateAdminCredentials } from '../hooks';
+import { Skeleton } from '../components/Common/Skeleton';
 import { toast } from 'sonner';
 
+const SettingsSkeleton: React.FC = () => (
+  <div className="space-y-7 max-w-4xl animate-pulse">
+    {/* Header Skeleton */}
+    <div className="space-y-2">
+      <Skeleton className="h-6 w-60" />
+      <Skeleton className="h-3.5 w-96" />
+    </div>
+
+    {/* Theme Preferences Card Skeleton */}
+    <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-5 space-y-4">
+      <Skeleton className="h-4 w-40" />
+      <Skeleton className="h-3 w-72" />
+      <div className="grid grid-cols-2 gap-3 max-w-md">
+        <Skeleton className="h-16 rounded-xl" />
+        <Skeleton className="h-16 rounded-xl" />
+      </div>
+    </div>
+
+    {/* Profile Credentials Form Skeleton */}
+    <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 space-y-4">
+      <Skeleton className="h-4 w-48" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Skeleton className="h-10 rounded-xl" />
+        <Skeleton className="h-10 rounded-xl" />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+        <Skeleton className="h-10 rounded-xl" />
+        <Skeleton className="h-10 rounded-xl" />
+        <Skeleton className="h-10 rounded-xl" />
+      </div>
+      <Skeleton className="h-10 w-32 rounded-xl" />
+    </div>
+  </div>
+);
+
 export const Settings: React.FC = () => {
-  const { admin, refreshProfile } = useAdminAuth();
+  const { admin, refreshProfile, isLoading } = useAdminAuth();
   const { theme, setTheme } = useTheme();
   const updateMutation = useUpdateAdminCredentials();
 
@@ -59,6 +95,10 @@ export const Settings: React.FC = () => {
       toast.error(err.message || 'Failed to update admin credentials');
     }
   };
+
+  if (isLoading && !admin) {
+    return <SettingsSkeleton />;
+  }
 
   return (
     <div className="space-y-7 max-w-4xl">

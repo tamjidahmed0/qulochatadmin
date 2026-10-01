@@ -22,6 +22,60 @@ import { Modal } from '../components/Common/Modal';
 import { Skeleton } from '../components/Common/Skeleton';
 import { toast } from 'sonner';
 
+const BroadcastSkeleton: React.FC = () => (
+  <div className="space-y-8 animate-pulse">
+    {/* Page Title & Intro Skeleton */}
+    <div className="space-y-2">
+      <Skeleton className="h-6 w-64" />
+      <Skeleton className="h-3.5 w-96" />
+    </div>
+
+    {/* Segmented Channel Selector Tabs Skeleton */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex items-start gap-4">
+        <Skeleton className="w-12 h-12 rounded-xl shrink-0" />
+        <div className="space-y-2 flex-1">
+          <Skeleton className="h-4 w-36" />
+          <Skeleton className="h-3 w-full" />
+          <Skeleton className="h-3 w-4/5" />
+        </div>
+      </div>
+      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex items-start gap-4">
+        <Skeleton className="w-12 h-12 rounded-xl shrink-0" />
+        <div className="space-y-2 flex-1">
+          <Skeleton className="h-4 w-36" />
+          <Skeleton className="h-3 w-full" />
+          <Skeleton className="h-3 w-4/5" />
+        </div>
+      </div>
+    </div>
+
+    {/* Broadcast Form & Live Preview Grid Skeleton */}
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 space-y-4">
+        <Skeleton className="h-4 w-48" />
+        <Skeleton className="h-9 w-full rounded-xl" />
+        <Skeleton className="h-32 w-full rounded-xl" />
+        <Skeleton className="h-10 w-36 rounded-xl" />
+      </div>
+      <div className="lg:col-span-5 bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 space-y-4">
+        <Skeleton className="h-4 w-40" />
+        <Skeleton className="h-56 w-full rounded-2xl" />
+      </div>
+    </div>
+
+    {/* History Table Skeleton */}
+    <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl overflow-hidden p-6 space-y-4">
+      <Skeleton className="h-4 w-44" />
+      <div className="space-y-3">
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} className="h-12 w-full rounded-xl" />
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
 export const Broadcast: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'chat' | 'push'>('chat');
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
@@ -90,6 +144,10 @@ export const Broadcast: React.FC = () => {
       toast.error(err.message || 'Failed to dispatch broadcast');
     }
   };
+
+  if (isLoadingHistory && !history) {
+    return <BroadcastSkeleton />;
+  }
 
   return (
     <div className="space-y-8">

@@ -22,6 +22,56 @@ import { Modal } from '../components/Common/Modal';
 import { Skeleton } from '../components/Common/Skeleton';
 import { toast } from 'sonner';
 
+const UsersSkeleton: React.FC = () => (
+  <div className="space-y-6 animate-pulse">
+    {/* Header Skeleton */}
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="space-y-2">
+        <Skeleton className="h-6 w-56" />
+        <Skeleton className="h-3.5 w-72" />
+      </div>
+      <Skeleton className="h-9 w-28 rounded-xl" />
+    </div>
+
+    {/* Filter and Search Bar Skeleton */}
+    <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <Skeleton className="h-9 w-full rounded-xl" />
+      <Skeleton className="h-9 w-full rounded-xl" />
+      <Skeleton className="h-9 w-full rounded-xl" />
+      <Skeleton className="h-9 w-full rounded-xl" />
+    </div>
+
+    {/* Table Skeleton */}
+    <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm">
+      <div className="px-5 py-3.5 bg-slate-50 dark:bg-zinc-950/60 border-b border-slate-200/60 dark:border-zinc-800 flex items-center justify-between">
+        <Skeleton className="h-3.5 w-32" />
+        <Skeleton className="h-3.5 w-16" />
+      </div>
+      <div className="divide-y divide-slate-100 dark:divide-zinc-800/80">
+        {Array.from({ length: 6 }).map((_, idx) => (
+          <div key={idx} className="px-5 py-4 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <Skeleton className="w-9 h-9 rounded-full shrink-0" />
+              <div className="space-y-1.5">
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-3 w-40" />
+              </div>
+            </div>
+            <Skeleton className="h-5 w-16 rounded-full" />
+            <Skeleton className="h-5 w-14 rounded-full" />
+            <Skeleton className="h-3.5 w-36" />
+            <Skeleton className="h-6 w-20 rounded-full" />
+            <div className="flex gap-1.5">
+              <Skeleton className="w-7 h-7 rounded-lg" />
+              <Skeleton className="w-7 h-7 rounded-lg" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
 export const Users: React.FC = () => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
@@ -101,6 +151,10 @@ export const Users: React.FC = () => {
       toast.error(err.message || 'Failed to delete user');
     }
   };
+
+  if (isLoading && !data) {
+    return <UsersSkeleton />;
+  }
 
   return (
     <div className="space-y-6">

@@ -124,7 +124,15 @@ export const Dashboard: React.FC = () => {
     { key: 'all', label: 'All Time' },
   ];
 
-  if (isLoading) {
+  const rangeLabels: Record<string, string> = {
+    '7d': 'Last 7 Days',
+    '30d': 'Last 30 Days',
+    '90d': 'Last 90 Days',
+    all: 'All Time',
+  };
+  const activeLabel = rangeLabels[range] || 'Last 30 Days';
+
+  if (isLoading && !data) {
     return <DashboardSkeleton />;
   }
 
@@ -137,7 +145,7 @@ export const Dashboard: React.FC = () => {
             Platform Overview
           </h2>
           <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
-            Real-time aggregate data across all workspaces, users, and conversations
+            Real-time aggregate data across all workspaces, users, and conversations • Filtered by {activeLabel}
           </p>
         </div>
 
@@ -148,13 +156,16 @@ export const Dashboard: React.FC = () => {
               <button
                 key={r.key}
                 onClick={() => setRange(r.key)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer flex items-center gap-1.5 ${
                   range === r.key
                     ? 'bg-sky-500 text-white shadow-xs font-semibold'
                     : 'text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100'
                 }`}
               >
-                {r.label}
+                <span>{r.label}</span>
+                {range === r.key && isFetching && (
+                  <RefreshCw className="w-3 h-3 animate-spin" />
+                )}
               </button>
             ))}
           </div>
@@ -180,25 +191,50 @@ export const Dashboard: React.FC = () => {
       {/* KPI Stat Cards (Clean 3-column layout without gradient icon squares) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
         <StatCard
-          title="Total Users"
+          title={range === 'all' ? 'Total Users' : `Users (${activeLabel})`}
           value={data?.kpis.totalUsers.value}
-          subtitle={`${data?.kpis.totalUsers.active ?? 0} Active • ${data?.kpis.totalUsers.inactive ?? 0} Inactive`}
+          subtitle={
+            range === 'all'
+              ? `${data?.kpis.totalUsers.active ?? 0} Active • ${data?.kpis.totalUsers.inactive ?? 0} Inactive`
+              : `+${data?.kpis.totalUsers.periodCount ?? 0} new in this period • ${data?.kpis.totalUsers.active ?? 0} Active`
+          }
           trend={data?.kpis.totalUsers.trend}
           trendUp={data?.kpis.totalUsers.trendUp}
+          loading={isFetching}
         />
 
         <StatCard
-          title="Total Messages Exchanged"
-          value={data?.kpis.totalMessages.value}
-          subtitle={`${(data?.kpis.totalMessages.periodCount ?? 0).toLocaleString()} in this period`}
+          title={range === 'all' ? 'Total Messages Exchanged' : `Messages (${activeLabel})`}
+          value={
+            range === 'all'
+              ? data?.kpis.totalMessages.value
+              : data?.kpis.totalMessages.periodCount ?? data?.kpis.totalMessages.value
+          }
+          subtitle={
+            range === 'all'
+              ? 'All-time system messages across all workspaces'
+              : `${(data?.kpis.totalMessages.value ?? 0).toLocaleString()} all-time total`
+          }
           trend={data?.kpis.totalMessages.trend}
           trendUp={data?.kpis.totalMessages.trendUp}
+          loading={isFetching}
         />
 
         <StatCard
-          title="Total Conversations"
-          value={data?.kpis.totalConversations.value}
-          subtitle={`${data?.kpis.totalConversations.active ?? 0} Active • ${data?.kpis.totalConversations.closed ?? 0} Closed`}
+          title={range === 'all' ? 'Total Conversations' : `Conversations (${activeLabel})`}
+          value={
+            range === 'all'
+              ? data?.kpis.totalConversations.value
+              : data?.kpis.totalConversations.periodCount ?? data?.kpis.totalConversations.value
+          }
+          subtitle={
+            range === 'all'
+              ? `${data?.kpis.totalConversations.active ?? 0} Active • ${data?.kpis.totalConversations.closed ?? 0} Closed`
+              : `${data?.kpis.totalConversations.value ?? 0} all-time • ${data?.kpis.totalConversations.active ?? 0} Active`
+          }
+          trend={data?.kpis.totalConversations.trend}
+          trendUp={data?.kpis.totalConversations.trendUp}
+          loading={isFetching}
         />
       </div>
 
@@ -251,19 +287,35 @@ export const Dashboard: React.FC = () => {
         <div className="lg:col-span-2 bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-5 shadow-sm shadow-slate-200/40 dark:shadow-black/40">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-50">Message Activity Breakdown</h3>
-              <p className="text-xs text-slate-500 dark:text-zinc-400">Daily message traffic by Visitors, Agents, and AI Bots</p>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-50">
+                Message Activity Breakdown
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-zinc-400">
+                Daily message traffic for {activeLabel} by Visitors, Agents, and AI Bots
+              </p>
             </div>
           </div>
-          <MessageVolumeChart data={data?.timeline || []} />
+          <div className="relative">
+            {isFetching && (
+              <div className="absolute inset-0 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-2xs z-10 rounded-xl" />
+            )}
+            <MessageVolumeChart data={data?.timeline || []} />
+          </div>
         </div>
 
         {/* User Growth Chart (1 col) */}
         <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-5 shadow-sm shadow-slate-200/40 dark:shadow-black/40 flex flex-col justify-between">
           <div>
             <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-50">User Growth Timeline</h3>
-            <p className="text-xs text-slate-500 dark:text-zinc-400 mb-4">New user registrations across the selected period</p>
-            <UserGrowthChart data={data?.timeline || []} />
+            <p className="text-xs text-slate-500 dark:text-zinc-400 mb-4">
+              New user registrations during {activeLabel}
+            </p>
+            <div className="relative">
+              {isFetching && (
+                <div className="absolute inset-0 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-2xs z-10 rounded-xl" />
+              )}
+              <UserGrowthChart data={data?.timeline || []} />
+            </div>
           </div>
           <div className="mt-4 pt-3 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-xs text-slate-500 dark:text-zinc-400">
             <span>Recent Growth Rate</span>
