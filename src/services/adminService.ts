@@ -40,7 +40,9 @@ export const adminService = {
 
   async getSessions(): Promise<
     Array<{
+      id: string;
       token: string;
+      maskedToken?: string;
       isCurrent: boolean;
       ip: string;
       userAgent: string;
@@ -49,6 +51,10 @@ export const adminService = {
     }>
   > {
     return api.get('/admin/auth/sessions');
+  },
+
+  async revokeSession(sessionId: string): Promise<{ success: boolean; message: string; isCurrent?: boolean }> {
+    return api.delete(`/admin/auth/sessions/${sessionId}`);
   },
 
   async revokeAllOtherSessions(): Promise<{ success: boolean; message: string; revokedCount: number }> {

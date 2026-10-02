@@ -60,6 +60,7 @@ export const Settings: React.FC = () => {
   const [sessions, setSessions] = useState<any[]>([]);
   const [isLoadingSessions, setIsLoadingSessions] = useState(false);
   const [isRevoking, setIsRevoking] = useState(false);
+  const [revokingSessionId, setRevokingSessionId] = useState<string | null>(null);
 
   const loadSessions = async () => {
     setIsLoadingSessions(true);
@@ -78,6 +79,24 @@ export const Settings: React.FC = () => {
       loadSessions();
     }
   }, [admin]);
+
+  const handleRevokeSingleSession = async (sessionId: string) => {
+    setRevokingSessionId(sessionId);
+    try {
+      const res = await adminService.revokeSession(sessionId);
+      if (res.isCurrent) {
+        toast.success('Logged out successfully');
+        window.location.href = '/login';
+        return;
+      }
+      toast.success('Session revoked! Device has been logged out.');
+      await loadSessions();
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to revoke session');
+    } finally {
+      setRevokingSessionId(null);
+    }
+  };
 
   const handleRevokeAllOthers = async () => {
     setIsRevoking(true);
@@ -430,11 +449,30 @@ export const Settings: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="text-right text-[11px] text-slate-500 dark:text-zinc-400 shrink-0">
-                      <div>Logged in: {new Date(sess.createdAt).toLocaleDateString()}</div>
-                      <div className="text-[10px] text-slate-400 dark:text-zinc-500 font-mono">
-                        TTL: 7 days
+                    <div className="flex items-center gap-3">
+                      <div className="text-right text-[11px] text-slate-500 dark:text-zinc-400 shrink-0 hidden sm:block">
+                        <div>Logged in: {new Date(sess.createdAt).toLocaleDateString()}</div>
+                        <div className="text-[10px] text-slate-400 dark:text-zinc-500 font-mono">
+                          TTL: 7 days
+                        </div>
                       </div>
+
+                      {!sess.isCurrent && (
+                        <button
+                          type="button"
+                          onClick={() => handleRevokeSingleSession(sess.id || sess.token)}
+                          disabled={revokingSessionId === (sess.id || sess.token)}
+                          className="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/60 text-rose-600 dark:text-rose-400 border border-rose-200/80 dark:border-rose-900/60 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                          title="Log out this specific device"
+                        >
+                          {revokingSessionId === (sess.id || sess.token) ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <LogOut className="w-3.5 h-3.5" />
+                          )}
+                          <span>Log Out</span>
+                        </button>
+                      )}
                     </div>
                   </div>
                 );
