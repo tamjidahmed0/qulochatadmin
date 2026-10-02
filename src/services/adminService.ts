@@ -38,6 +38,23 @@ export const adminService = {
     }
   },
 
+  async getSessions(): Promise<
+    Array<{
+      token: string;
+      isCurrent: boolean;
+      ip: string;
+      userAgent: string;
+      createdAt: string;
+      lastActiveAt: string;
+    }>
+  > {
+    return api.get('/admin/auth/sessions');
+  },
+
+  async revokeAllOtherSessions(): Promise<{ success: boolean; message: string; revokedCount: number }> {
+    return api.post('/admin/auth/revoke-all');
+  },
+
   // ── Analytics ──
   async getAnalyticsOverview(range: string = '30d'): Promise<AnalyticsOverview> {
     return api.get<AnalyticsOverview>('/admin/analytics/overview', { range });

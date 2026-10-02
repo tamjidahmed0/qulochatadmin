@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { KeyRound, Lock, User, Mail, Save, Loader2, Sun, Moon } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { KeyRound, Lock, User, Mail, Save, Loader2, Sun, Moon, ShieldCheck, Laptop, Smartphone, RefreshCw, LogOut } from 'lucide-react';
 import { useAdminAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useUpdateAdminCredentials } from '../hooks';
+import { adminService } from '../services/adminService';
 import { Skeleton } from '../components/Common/Skeleton';
 import { toast } from 'sonner';
 
@@ -54,6 +55,42 @@ export const Settings: React.FC = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  // Stateful Redis Sessions
+  const [sessions, setSessions] = useState<any[]>([]);
+  const [isLoadingSessions, setIsLoadingSessions] = useState(false);
+  const [isRevoking, setIsRevoking] = useState(false);
+
+  const loadSessions = async () => {
+    setIsLoadingSessions(true);
+    try {
+      const data = await adminService.getSessions();
+      setSessions(data || []);
+    } catch {
+      // Ignore if session call not available
+    } finally {
+      setIsLoadingSessions(false);
+    }
+  };
+
+  useEffect(() => {
+    if (admin) {
+      loadSessions();
+    }
+  }, [admin]);
+
+  const handleRevokeAllOthers = async () => {
+    setIsRevoking(true);
+    try {
+      const res = await adminService.revokeAllOtherSessions();
+      toast.success(res.message || 'All other active sessions revoked');
+      await loadSessions();
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to revoke sessions');
+    } finally {
+      setIsRevoking(false);
+    }
+  };
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -289,6 +326,126 @@ export const Settings: React.FC = () => {
               </button>
             </div>
           </form>
+        </div>
+
+        {/* Stateful Redis Sessions & Security Card */}
+        <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 shadow-sm shadow-slate-200/40 dark:shadow-black/40 space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-zinc-800">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-100 dark:border-sky-900/60 flex items-center justify-center text-sky-500">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
+                  <span>Stateful Redis Sessions</span>
+                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Stateful & Revocable
+                  </span>
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
+                  Sessions are stored in Redis with real-time revocation capabilities across devices
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={loadSessions}
+                disabled={isLoadingSessions}
+                className="p-2 text-slate-500 dark:text-zinc-400 hover:text-slate-800 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-xl transition cursor-pointer"
+                title="Refresh sessions list"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isLoadingSessions ? 'animate-spin text-sky-500' : ''}`} />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleRevokeAllOthers}
+                disabled={isRevoking || sessions.length <= 1}
+                className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/40 text-rose-600 dark:text-rose-400 border border-rose-200/80 dark:border-rose-900/60 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {isRevoking ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <LogOut className="w-3.5 h-3.5" />
+                )}
+                <span>Revoke All Other Sessions</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Session List */}
+          <div className="space-y-2.5">
+            {isLoadingSessions && sessions.length === 0 ? (
+              <div className="space-y-2 py-2">
+                <Skeleton className="h-14 rounded-xl" />
+                <Skeleton className="h-14 rounded-xl" />
+              </div>
+            ) : sessions.length === 0 ? (
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-950/50 border border-slate-100 dark:border-zinc-800/80 text-xs text-slate-500 dark:text-zinc-400 text-center">
+                Current active session connected via Redis.
+              </div>
+            ) : (
+              sessions.map((sess, idx) => {
+                const isMobile = /mobile|android|iphone|ipad/i.test(sess.userAgent || '');
+                return (
+                  <div
+                    key={idx}
+                    className={`flex items-center justify-between p-3.5 rounded-xl border transition ${
+                      sess.isCurrent
+                        ? 'bg-sky-50/50 dark:bg-sky-950/20 border-sky-200 dark:border-sky-900/50'
+                        : 'bg-white dark:bg-zinc-950/40 border-slate-200/70 dark:border-zinc-800/80'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                          sess.isCurrent
+                            ? 'bg-sky-100 dark:bg-sky-900/40 text-sky-600 dark:text-sky-400'
+                            : 'bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400'
+                        }`}
+                      >
+                        {isMobile ? (
+                          <Smartphone className="w-4 h-4" />
+                        ) : (
+                          <Laptop className="w-4 h-4" />
+                        )}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-semibold text-slate-900 dark:text-zinc-100 font-mono">
+                            {sess.ip === '127.0.0.1' || sess.ip === '::1' ? 'Localhost (127.0.0.1)' : sess.ip}
+                          </span>
+                          {sess.isCurrent && (
+                            <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-sky-100 text-sky-700 dark:bg-sky-900/50 dark:text-sky-300">
+                              This Device
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-zinc-400 truncate max-w-sm sm:max-w-md mt-0.5">
+                          {sess.userAgent}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="text-right text-[11px] text-slate-500 dark:text-zinc-400 shrink-0">
+                      <div>Logged in: {new Date(sess.createdAt).toLocaleDateString()}</div>
+                      <div className="text-[10px] text-slate-400 dark:text-zinc-500 font-mono">
+                        TTL: 7 days
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+
+          <div className="pt-2 text-[11px] text-slate-500 dark:text-zinc-400 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-sky-500" />
+            <span>Stateful session architecture: Invalidation takes effect instantly without waiting for token expiry.</span>
+          </div>
         </div>
       </div>
     );
