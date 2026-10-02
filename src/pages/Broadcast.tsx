@@ -1,74 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import {
   Megaphone,
   Bell,
   Send,
   Image,
   Link2,
-  CheckCircle,
   AlertTriangle,
   History,
   Loader2,
 } from 'lucide-react';
 import {
-  useBroadcastHistory,
   useBroadcastChatAnnouncement,
   useBroadcastPushNotification,
 } from '../hooks';
 import { Badge } from '../components/Common/Badge';
 import { Modal } from '../components/Common/Modal';
-import { Skeleton } from '../components/Common/Skeleton';
+import { BroadcastHeader } from '../components/Broadcast/BroadcastHeader';
 import { toast } from 'sonner';
 
-const BroadcastSkeleton: React.FC = () => (
-  <div className="space-y-8 animate-pulse">
-    {/* Page Title & Intro Skeleton */}
-    <div className="space-y-2">
-      <Skeleton className="h-6 w-64" />
-      <Skeleton className="h-3.5 w-96" />
-    </div>
-
-    {/* Segmented Channel Selector Tabs Skeleton */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex items-start gap-4">
-        <Skeleton className="w-12 h-12 rounded-xl shrink-0" />
-        <div className="space-y-2 flex-1">
-          <Skeleton className="h-4 w-36" />
-          <Skeleton className="h-3 w-full" />
-          <Skeleton className="h-3 w-4/5" />
-        </div>
-      </div>
-      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex items-start gap-4">
-        <Skeleton className="w-12 h-12 rounded-xl shrink-0" />
-        <div className="space-y-2 flex-1">
-          <Skeleton className="h-4 w-36" />
-          <Skeleton className="h-3 w-full" />
-          <Skeleton className="h-3 w-4/5" />
-        </div>
-      </div>
-    </div>
-
-    {/* Broadcast Form Skeleton (Full-Width Clean Card) */}
-    <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 sm:p-7 space-y-4">
-      <Skeleton className="h-4 w-48" />
-      <Skeleton className="h-10 w-full rounded-xl" />
-      <Skeleton className="h-36 w-full rounded-xl" />
-      <Skeleton className="h-10 w-full rounded-xl" />
-    </div>
-
-    {/* History Table Skeleton */}
-    <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl overflow-hidden p-6 space-y-4">
-      <Skeleton className="h-4 w-44" />
-      <div className="space-y-3">
-        {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-12 w-full rounded-xl" />
-        ))}
-      </div>
-    </div>
-  </div>
-);
-
 export const Broadcast: React.FC = () => {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<'chat' | 'push'>('chat');
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
@@ -82,13 +34,30 @@ export const Broadcast: React.FC = () => {
   const [pushBody, setPushBody] = useState('');
   const [pushActionUrl, setPushActionUrl] = useState('');
 
-  // TanStack Query Hooks
-  const { data: history = [], isLoading: isLoadingHistory, refetch: refetchHistory } =
-    useBroadcastHistory();
+  // TanStack Query Mutations
   const chatMutation = useBroadcastChatAnnouncement();
   const pushMutation = useBroadcastPushNotification();
 
   const isSending = chatMutation.isPending || pushMutation.isPending;
+
+  // Check for prefill from history "Reuse" action
+  useEffect(() => {
+    if (location.state && (location.state as any).prefill) {
+      const prefill = (location.state as any).prefill;
+      if (prefill.type === 'OFFICIAL_CHAT') {
+        setActiveTab('chat');
+        setChatTitle(prefill.title || '');
+        setChatMessage(prefill.message || '');
+        setChatBannerUrl(prefill.fileUrl || '');
+      } else if (prefill.type === 'PUSH_NOTIFICATION') {
+        setActiveTab('push');
+        setPushTitle(prefill.title || '');
+        setPushBody(prefill.message || '');
+        setPushActionUrl(prefill.actionUrl || '');
+      }
+      toast.info('Loaded transmission into composer');
+    }
+  }, [location.state]);
 
   const handleOpenConfirm = (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,21 +106,13 @@ export const Broadcast: React.FC = () => {
     }
   };
 
-  if (isLoadingHistory && (!history || history.length === 0)) {
-    return <BroadcastSkeleton />;
-  }
-
   return (
-    <div className="space-y-8">
-      {/* Page Title & Intro */}
-      <div>
-        <h2 className="text-xl font-bold text-slate-900 dark:text-zinc-50 tracking-tight">
-          Notification & Announcement Center
-        </h2>
-        <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">
-          Broadcast official platform announcements directly to inboxes or push alerts to active users
-        </p>
-      </div>
+    <div className="space-y-6">
+      {/* Header with Navigation Switcher */}
+      <BroadcastHeader
+        title="Notification & Announcement Center"
+        subtitle="Broadcast official platform announcements directly to inboxes or push alerts to active users"
+      />
 
       {/* Segmented Channel Selector Tabs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -219,23 +180,33 @@ export const Broadcast: React.FC = () => {
       </div>
 
       {/* Broadcast Form (Full-Width Card) */}
-      <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 sm:p-7 shadow-sm shadow-slate-200/40 dark:shadow-black/40">
-        <div className="flex items-center gap-2.5 mb-5 pb-4 border-b border-slate-100 dark:border-zinc-800">
-          {activeTab === 'chat' ? (
-            <Megaphone className="w-5 h-5 text-sky-500 stroke-[2.25]" />
-          ) : (
-            <Bell className="w-5 h-5 text-emerald-500 stroke-[2.25]" />
-          )}
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">
-              {activeTab === 'chat' ? 'Compose Official Chat Announcement' : 'Compose In-App & Push Notification'}
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-zinc-400">
-              {activeTab === 'chat'
-                ? 'Delivers to every workspace owner in their system channel'
-                : 'Delivers to all active users on web and mobile'}
-            </p>
+      <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl p-6 sm:p-7 shadow-xs">
+        <div className="flex items-center justify-between mb-5 pb-4 border-b border-slate-100 dark:border-zinc-800">
+          <div className="flex items-center gap-2.5">
+            {activeTab === 'chat' ? (
+              <Megaphone className="w-5 h-5 text-sky-500 stroke-[2.25]" />
+            ) : (
+              <Bell className="w-5 h-5 text-emerald-500 stroke-[2.25]" />
+            )}
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">
+                {activeTab === 'chat' ? 'Compose Official Chat Announcement' : 'Compose In-App & Push Notification'}
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-zinc-400">
+                {activeTab === 'chat'
+                  ? 'Delivers to every workspace owner in their system channel'
+                  : 'Delivers to all active users on web and mobile'}
+              </p>
+            </div>
           </div>
+
+          <Link
+            to="/broadcast/history"
+            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-sky-600 dark:text-zinc-400 dark:hover:text-sky-400 transition"
+          >
+            <History className="w-3.5 h-3.5" />
+            <span>View Transmission History</span>
+          </Link>
         </div>
 
         <form onSubmit={handleOpenConfirm} className="space-y-4">
@@ -352,93 +323,6 @@ export const Broadcast: React.FC = () => {
             </button>
           </div>
         </form>
-      </div>
-
-      {/* Broadcast History Table */}
-      <div className="bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm shadow-slate-200/40 dark:shadow-black/40">
-        <div className="px-6 py-4 border-b border-slate-100 dark:border-zinc-800 flex items-center justify-between bg-slate-50/50 dark:bg-zinc-950/40">
-          <div className="flex items-center gap-2.5">
-            <History className="w-4 h-4 text-sky-500" />
-            <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-50">Broadcast Transmission History</h3>
-              <p className="text-xs text-slate-500 dark:text-zinc-400">Previous official announcements and global push dispatches</p>
-            </div>
-          </div>
-          <button
-            onClick={() => refetchHistory()}
-            className="text-xs font-medium text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition cursor-pointer"
-          >
-            Refresh History
-          </button>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 dark:bg-zinc-950/60 text-slate-500 dark:text-zinc-400 uppercase tracking-wider font-semibold border-b border-slate-200/60 dark:border-zinc-800">
-              <tr>
-                <th className="px-6 py-3">Channel Type</th>
-                <th className="px-6 py-3">Title / Subject</th>
-                <th className="px-6 py-3">Message Snippet</th>
-                <th className="px-6 py-3">Timestamp</th>
-                <th className="px-6 py-3">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-zinc-800/80">
-              {isLoadingHistory ? (
-                Array.from({ length: 4 }).map((_, idx) => (
-                  <tr key={idx} className="animate-in fade-in duration-200">
-                    <td className="px-6 py-4">
-                      <Skeleton className="h-5 w-20 rounded-full" />
-                    </td>
-                    <td className="px-6 py-4">
-                      <Skeleton className="h-4 w-36 rounded" />
-                    </td>
-                    <td className="px-6 py-4">
-                      <Skeleton className="h-3.5 w-64 rounded" />
-                    </td>
-                    <td className="px-6 py-4">
-                      <Skeleton className="h-3.5 w-28 rounded" />
-                    </td>
-                    <td className="px-6 py-4">
-                      <Skeleton className="h-4 w-16 rounded" />
-                    </td>
-                  </tr>
-                ))
-              ) : history && history.length > 0 ? (
-                history.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-zinc-800/40 transition-colors">
-                    <td className="px-6 py-3.5">
-                      <Badge variant={item.type === 'OFFICIAL_CHAT' ? 'primary' : 'success'}>
-                        {item.type === 'OFFICIAL_CHAT' ? 'Official Chat' : 'In-App Push'}
-                      </Badge>
-                    </td>
-                    <td className="px-6 py-3.5 font-semibold text-slate-900 dark:text-zinc-100">
-                      {item.title || 'Official Announcement'}
-                    </td>
-                    <td className="px-6 py-3.5 text-slate-500 dark:text-zinc-400 max-w-md truncate">
-                      {item.message}
-                    </td>
-                    <td className="px-6 py-3.5 text-slate-400 dark:text-zinc-500 font-mono text-[11px]">
-                      {new Date(item.createdAt).toLocaleString()}
-                    </td>
-                    <td className="px-6 py-3.5">
-                      <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
-                        <CheckCircle className="w-3.5 h-3.5" />
-                        <span>Delivered</span>
-                      </span>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-slate-400 dark:text-zinc-500">
-                    No broadcast transmissions sent yet
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
       </div>
 
       {/* Confirmation Safety Modal */}

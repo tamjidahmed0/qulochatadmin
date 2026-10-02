@@ -10,6 +10,7 @@ import { AdminLayout } from './components/Layout/AdminLayout';
 import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { Broadcast } from './pages/Broadcast';
+import { BroadcastHistory } from './pages/BroadcastHistory';
 import { Users } from './pages/Users';
 import { SystemHealth } from './pages/SystemHealth';
 import { Settings } from './pages/Settings';
@@ -38,6 +39,7 @@ export const App: React.FC = () => {
               <Route element={<AdminLayout />}>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/broadcast" element={<Broadcast />} />
+                <Route path="/broadcast/history" element={<BroadcastHistory />} />
                 <Route path="/users" element={<Users />} />
                 <Route path="/system" element={<SystemHealth />} />
                 <Route path="/settings" element={<Settings />} />

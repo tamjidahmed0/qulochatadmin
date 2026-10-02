@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   Megaphone,
+  History,
   Users,
   Activity,
   Settings,
@@ -20,7 +21,8 @@ export const AdminSidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   const navItems = [
     { to: '/', label: 'Analytics & Overview', icon: LayoutDashboard, exact: true },
-    { to: '/broadcast', label: 'Broadcast System', icon: Megaphone },
+    { to: '/broadcast', label: 'New Broadcast', icon: Megaphone, exact: true },
+    { to: '/broadcast/history', label: 'Broadcast History', icon: History, exact: true },
     { to: '/users', label: 'User Directory', icon: Users },
     { to: '/system', label: 'Server & System Health', icon: Activity },
     { to: '/settings', label: 'Admin Security', icon: Settings },
