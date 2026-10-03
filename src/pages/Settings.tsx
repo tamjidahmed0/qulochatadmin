@@ -49,7 +49,6 @@ export const Settings: React.FC = () => {
 
   const [name, setName] = useState(admin?.name || 'Super Administrator');
   const [email, setEmail] = useState(admin?.email || '');
-  const [username, setUsername] = useState(admin?.username || '');
 
   // Password fields
   const [currentPassword, setCurrentPassword] = useState('');
@@ -128,8 +127,6 @@ export const Settings: React.FC = () => {
       const payload: any = {};
       if (name.trim() !== admin?.name) payload.name = name.trim();
       if (email.trim().toLowerCase() !== admin?.email) payload.email = email.trim().toLowerCase();
-      if (username.trim().toLowerCase() !== admin?.username)
-        payload.username = username.trim().toLowerCase();
 
       if (newPassword) {
         payload.currentPassword = currentPassword;
@@ -244,29 +241,16 @@ export const Settings: React.FC = () => {
 
             <div>
               <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1.5">
-                Admin Username
+                Email Address
               </label>
               <input
-                type="text"
+                type="email"
                 required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 rounded-xl text-xs text-slate-900 dark:text-zinc-100 outline-none transition"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 rounded-xl text-xs text-slate-900 dark:text-zinc-100 outline-none transition font-mono"
               />
             </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1.5">
-              Admin Master Email
-            </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 rounded-xl text-xs text-slate-900 dark:text-zinc-100 outline-none transition font-mono"
-            />
           </div>
 
           {/* Password Change Sub-section */}

@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AlertCircle, Loader2, Sun, Moon, Eye, EyeOff } from 'lucide-react';
+import { AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
 import { useAdminAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAdminAuth();
-  const { theme, toggleTheme } = useTheme();
 
-  const [identifier, setIdentifier] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,8 +25,8 @@ export const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!identifier.trim() || !password) {
-      setError('Please enter both your email/username and password.');
+    if (!email.trim() || !password) {
+      setError('Please enter both your email and password.');
       return;
     }
 
@@ -38,10 +36,10 @@ export const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await login(identifier.trim(), password);
+      await login(email.trim(), password);
       navigate('/', { replace: true });
     } catch (err: any) {
-      const msg = err.message || 'Invalid email/username or password.';
+      const msg = err.message || 'Invalid email or password.';
       setError(msg);
 
       if (err.statusCode === 429 && err.retryAfter) {
@@ -60,23 +58,6 @@ export const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#09090b] flex flex-col justify-center items-center p-4 relative selection:bg-sky-500/20 selection:text-sky-600 transition-colors duration-200">
-      {/* Top Floating Theme Toggle */}
-      <div className="absolute top-5 right-5 z-20">
-        <button
-          type="button"
-          onClick={toggleTheme}
-          className="flex items-center justify-center w-9 h-9 rounded-xl bg-white dark:bg-zinc-900 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-100 border border-slate-200/80 dark:border-zinc-800 shadow-xs transition cursor-pointer"
-          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
-          aria-label="Toggle theme"
-        >
-          {theme === 'dark' ? (
-            <Sun className="w-4 h-4 text-amber-400 stroke-[2.25]" />
-          ) : (
-            <Moon className="w-4 h-4 text-slate-600 stroke-[2.25]" />
-          )}
-        </button>
-      </div>
-
       <div className="w-full max-w-sm">
         {/* Brand Header: Logo + Service Name */}
         <div className="flex items-center justify-center gap-2.5 mb-6 select-none">
@@ -97,7 +78,7 @@ export const Login: React.FC = () => {
               Sign in
             </h1>
             <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">
-              Enter your credentials to access your account
+              Enter your email and password to access your account
             </p>
           </div>
 
@@ -128,21 +109,21 @@ export const Login: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label
-                htmlFor="identifier"
+                htmlFor="email"
                 className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1.5"
               >
-                Email or username
+                Email
               </label>
               <input
-                id="identifier"
-                type="text"
+                id="email"
+                type="email"
                 required
                 autoFocus
-                autoComplete="username"
+                autoComplete="email"
                 disabled={isLoading || lockoutSeconds > 0}
-                value={identifier}
-                onChange={(e) => setIdentifier(e.target.value)}
-                placeholder="name@company.com or username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@quplochat.com"
                 className="w-full px-3.5 py-2.5 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 rounded-xl text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-600 transition outline-none disabled:opacity-50"
               />
             </div>

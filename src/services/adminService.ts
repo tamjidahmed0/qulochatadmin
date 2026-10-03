@@ -9,8 +9,12 @@ import type {
 
 export const adminService = {
   // ── Authentication ──
-  async login(identifier: string, password: string): Promise<{ token: string; admin: AdminProfile }> {
-    return api.post('/admin/auth/login', { identifier, password });
+  async login(emailOrIdentifier: string, password: string): Promise<{ token: string; admin: AdminProfile }> {
+    return api.post('/admin/auth/login', {
+      identifier: emailOrIdentifier,
+      email: emailOrIdentifier,
+      password,
+    });
   },
 
   async getMe(): Promise<AdminProfile> {

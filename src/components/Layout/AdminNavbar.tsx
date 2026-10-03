@@ -72,13 +72,13 @@ export const AdminNavbar: React.FC<NavbarProps> = ({ onOpenSidebar }) => {
         <div className="flex items-center gap-2.5 pl-1">
           <div className="relative">
             <div className="w-7 h-7 rounded-lg bg-sky-500 flex items-center justify-center text-white text-xs font-bold shadow-xs">
-              {admin?.username?.charAt(0).toUpperCase() || 'A'}
+              {admin?.name?.charAt(0).toUpperCase() || admin?.email?.charAt(0).toUpperCase() || 'A'}
             </div>
             <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#09090b]" />
           </div>
           <div className="hidden md:block text-left">
             <p className="text-xs font-semibold text-slate-800 dark:text-zinc-200 leading-tight">
-              {admin?.name || admin?.username || 'Superadmin'}
+              {admin?.name || 'Administrator'}
             </p>
             <p className="text-[10px] text-slate-400 dark:text-zinc-500 font-mono leading-tight">
               {admin?.email || 'admin@quplochat.com'}
